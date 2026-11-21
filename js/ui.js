@@ -41,7 +41,10 @@
     cancelAnimationFrame(mgRaf); mgRaf = requestAnimationFrame(mgLoop);
   }
   function mgNew() {
-    if (mg.kind === 'lock') { mg.zs = 0.08 + Math.random() * (0.84 - mg.cfg.zone); }
+    if (mg.kind === 'lock') { // her başarılı pimde yeşil alan daralır, ibre hızlanır
+      mg.zw = mg.cfg.zone * Math.pow(0.8, mg.step); mg.sp = mg.cfg.speed * Math.pow(1.25, mg.step);
+      mg.zs = 0.08 + Math.random() * (0.84 - mg.zw);
+    }
     else { // kasa: her rakamda yön değişir; yeni rakam en az çeyrek tur uzakta başlar
       mg.target = (mg.pos + mg.dir * -1 * (90 + Math.random() * 180) + 720) % 360; mg.dir = mg.step % 2 ? -1 : 1; mg.win = 8 + mg.cfg.zone * 60; mg.inWin = false;
     }
@@ -51,7 +54,7 @@
     if (!mg || mg.done || !ui.modal || ui.modal.type !== 'mini') return;
     const dt = Math.min(0.05, (now - mg.last) / 1000); mg.last = now;
     if (mg.kind === 'lock') {
-      mg.pos += mg.dir * dt * mg.cfg.speed * 0.9;
+      mg.pos += mg.dir * dt * mg.sp * 0.9;
       if (mg.pos > 1) { mg.pos = 1; mg.dir = -1; } if (mg.pos < 0) { mg.pos = 0; mg.dir = 1; }
       const n = document.querySelector('.mneedle'); if (n) n.style.left = (mg.pos * 100) + '%';
     } else {
@@ -66,7 +69,7 @@
   }
   function mgTap() {
     if (!mg || mg.done) return;
-    const hit = mg.kind === 'lock' ? (mg.pos >= mg.zs && mg.pos <= mg.zs + mg.cfg.zone) : mg.inWin;
+    const hit = mg.kind === 'lock' ? (mg.pos >= mg.zs && mg.pos <= mg.zs + mg.zw) : mg.inWin;
     if (hit) { mg.step++; mg.flash = 'hit'; snd(mg.kind === 'lock' ? 'pick' : 'clink'); if (window.Haptic) Haptic.play('medium'); }
     else { mg.misses++; mg.flash = 'miss'; snd('bad'); }
     if (mg.step >= mg.cfg.steps) { mg.done = true; mg.won = true; }
@@ -94,7 +97,7 @@
     const b = $m.querySelector('.mtrack, .dial');
     if (b && st.flash) { b.classList.remove('hit', 'miss'); void b.offsetWidth; b.classList.add(st.flash); }
     st.flash = '';
-    const z = $m.querySelector('.mzone'); if (z && st.kind === 'lock') { z.style.left = (st.zs * 100) + '%'; }
+    const z = $m.querySelector('.mzone'); if (z && st.kind === 'lock') { z.style.left = (st.zs * 100) + '%'; z.style.width = (st.zw * 100) + '%'; }
     const c = $m.querySelector('[data-act=minicancel]'); if (c && (st.step || st.misses)) c.remove();
     if (st.done) {
       $m.querySelector('[data-act=mtap].b1')?.classList.add('off');
@@ -597,7 +600,7 @@
       const pins = Array.from({ length: c.steps }, (_, i) => `<span class="pin ${i < mg.step ? 'on' : ''}"></span>`).join('');
       const lives = Array.from({ length: c.misses + 1 }, (_, i) => `<span class="life ${i < mg.misses ? 'gone' : ''}">${ic('heart')}</span>`).join('');
       const board = lock
-        ? `<div class="mtrack ${mg.flash}" data-act="mtap"><div class="mzone" style="left:${mg.zs * 100}%;width:${c.zone * 100}%"></div><div class="mneedle" style="left:${mg.pos * 100}%"></div></div>`
+        ? `<div class="mtrack ${mg.flash}" data-act="mtap"><div class="mzone" style="left:${mg.zs * 100}%;width:${mg.zw * 100}%"></div><div class="mneedle" style="left:${mg.pos * 100}%"></div></div>`
         : `<div class="dial ${mg.flash}" data-act="mtap"><div class="dialface" style="transform:rotate(${-mg.pos}deg)">${Array.from({ length: 40 }, (_, i) => `<i style="transform:rotate(${i * 9}deg)"${i % 5 ? '' : ' class="big5"'}></i>`).join('')}</div><div class="dialmark"></div><div class="dialhub">${ic('lock-square')}</div></div>`;
       const res = mg.done ? `<div class="mres ${mg.won ? 'ok' : 'no'}">${mg.won ? (lock ? 'Açıldı!' : 'Kasa açıldı!') : 'Olmadı...'}</div>` : '';
       inner = `<h2 style="margin-bottom:4px">${lock ? 'Kilidi aç' : 'Şifreyi dinle'}</h2>
