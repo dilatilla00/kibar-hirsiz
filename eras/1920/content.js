@@ -315,6 +315,39 @@ window.ERA = {
   fenceTitle: 'Yatakçılar',
   fenceInfo: 'Soygunlardan çıkan eşyaları burada paraya çevirirsin. Teklifler her gece değişir; pazarlık edebilirsin ama yatakçı alınırsa o gece o malı almaz.',
 
+  // Soygun planı: işe başlamadan önce giriş yolu seçilir. fx: p (şans), time (süre çarpanı),
+  // loot (ganimet çarpanına ek), heat (fark edilme çarpanı). req: yetenek şartı, tiers: sadece bu hedef türleri.
+  routes: [
+    { id: 'kapi', name: 'Arka kapı', icon: 'door', desc: 'Dengeli yol. Ne hızlı ne yavaş, ne riskli ne güvenli.', fx: {} },
+    { id: 'cati', name: 'Çatıdan', icon: 'ladder', desc: 'Kiremitlerin üstünden yürüyüp bacadan inersin. Yavaş ama sessiz.', fx: { p: 8, time: 1.3 } },
+    { id: 'komur', name: 'Kömürlükten', icon: 'shovel', desc: 'Bodrum penceresinden dal, işini bitir, çık. Hızlı ama gürültülü.', fx: { p: -6, time: 0.7 } },
+    { id: 'usak', name: 'Uşak kılığında', icon: 'tie', req: { skill: 'tatli' }, desc: 'Ön kapıdan elinde tepsiyle girersin. Kimse şüphelenmez, ama ceplerine ancak küçük şeyler sığar.', fx: { heat: 0.5, loot: -0.25 } },
+    { id: 'kanal', name: 'Lağımdan', icon: 'droplet', tiers: ['magaza', 'muze'], desc: 'Eski sarnıçlardan geçip alttan girersin. Çok yavaş, ama en büyük kasalara ulaşırsın.', fx: { p: -4, loot: 0.3, time: 1.5 } },
+  ],
+
+  // Kozmetikler: üst köşedeki karakter simgesi ve rengi. gems: elmasla alınır, ach: başarımla açılır.
+  cosmetics: {
+    icons: [
+      { id: 'spy', name: 'Kibar Hırsız', icon: 'spy', gems: 0 },
+      { id: 'mask', name: 'Maskeli balo', icon: 'masks-theater', gems: 8 },
+      { id: 'gozluk', name: 'Karanlık gözlük', icon: 'sunglasses', gems: 10 },
+      { id: 'kravat', name: 'Beyefendi', icon: 'tie', gems: 10 },
+      { id: 'kedi', name: 'Kedi hırsız', icon: 'cat', gems: 15 },
+      { id: 'at', name: 'Satranç ustası', icon: 'chess-knight', gems: 20 },
+      { id: 'hayalet', name: 'Hayalet', icon: 'ghost', ach: 'seri_15' },
+      { id: 'kral', name: 'Hırsızlar kralı', icon: 'crown', ach: 'is_500' },
+    ],
+    colors: [
+      { id: 'altin', name: 'Altın', bg: '#f5c451', fg: '#2a1d00', gems: 0 },
+      { id: 'gumus', name: 'Gümüş', bg: '#c9d3e6', fg: '#1a2236', gems: 6 },
+      { id: 'gece', name: 'Gece mavisi', bg: '#3a55a0', fg: '#f2f5ff', gems: 6 },
+      { id: 'yakut', name: 'Yakut', bg: '#e0525f', fg: '#2a0508', gems: 12 },
+      { id: 'zumrut', name: 'Zümrüt', bg: '#3ccf8e', fg: '#05301b', gems: 12 },
+      { id: 'ametist', name: 'Ametist', bg: '#a48bff', fg: '#1b0f3d', gems: 12 },
+      { id: 'efsane', name: 'Efsane', bg: 'linear-gradient(135deg, #f5c451, #ff6b5b 55%, #a48bff)', fg: '#1a0d00', ach: 'efsane_1' },
+    ],
+  },
+
   // Başarımlar. kind: hangi sayaca bakılır (engine.js achValue), n: hedef, gems: açılınca verilen elmas.
   // Game Center'da her birinin kimliği "kh_" + id olur (App Store Connect'te aynı kimlikle tanımlanmalı).
   achievements: [

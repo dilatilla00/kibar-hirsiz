@@ -9,7 +9,7 @@ window.Tour = (function () {
     { sel: '.grid .card', title: 'Hedefler', text: 'Her kart soyabileceğin bir yer. Sağ üstte başarı şansın, altta ganimet aralığı yazar. Kilitli kartlar seviye ve yetenekle açılır.' },
     { sel: '.detail .dinfo', title: 'Şansın neye bağlı?', text: 'Seçtiğin hedefin ayrıntıları burada. Şansı artıran ve düşüren her etkeni tek tek görürsün: köpek, kilit, bekçi, yeteneklerin, aletlerin...' },
     { sel: '[data-act="scout"]', title: 'Önce keşif', text: 'Biraz para verip keşif yaparsan bir sonraki işte şansın artar. Zor hedeflerde işe yarar.' },
-    { sel: '[data-act="rob"]', title: 'Soyguna başla', text: 'Soygun gerçek zamanlı sürer: sessiz giriş, soygun ve kaçış. Kolay hedefler daha kısa, zor olanlar daha uzun sürer. Bu sırada oyundan çıkabilirsin, iş devam eder.' },
+    { sel: '[data-act="rob"]', title: 'Soyguna başla', text: 'Önce giriş yolunu seçersin: çatı, arka kapı, kömürlük... Sonra soygun gerçek zamanlı sürer: sessiz giriş, soygun ve kaçış. Bu sırada oyundan çıkabilirsin, iş devam eder.' },
     { sel: '.top', title: 'Üst çubuk', text: 'Paran, elmasın, ünün ve zabıta takibin. Elmasla soygunları hızlandırabilirsin. Takip arttıkça şansın düşer; 5\'e ulaşıp bir kez daha fark edilirsen yakalanırsın.' },
     { sel: '.quest', title: 'Görevler', text: 'Görevleri tamamladıkça para ve elmas kazanırsın. Göreve dokunup ayrıntısını görebilir, beğenmezsen başkasıyla değiştirebilirsin.' },
     { sel: '.rail', title: 'Menü', text: 'Yetenek öğren, alet al, karaborsadan mal topla, ekibini kur. Her ekrana ilk girdiğinde orada ne yapacağını kısaca anlatacağım.' },

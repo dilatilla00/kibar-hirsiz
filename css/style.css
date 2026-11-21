@@ -539,3 +539,36 @@ button { font-family: inherit; color: inherit; }
 .tagx { font-size: 10px; padding: 2px 6px; border-radius: 6px; background: var(--bg); color: var(--mu); display: inline-flex; align-items: center; gap: 2px; }
 .tagx.no { color: var(--no); } .tagx.ok { color: var(--ok); } .tagx.au { color: var(--au); }
 .lvup.goodline { background: color-mix(in srgb, var(--wa) 14%, var(--bg)); }
+
+/* Soygun planı */
+.routes { display: flex; flex-direction: column; gap: 7px; text-align: left; }
+.route { display: flex; align-items: center; gap: 12px; width: 100%; background: var(--bg); border: 1px solid var(--ln); border-radius: 11px; padding: 9px 12px; color: var(--tx); cursor: pointer; text-align: left; font: inherit; }
+.route:hover { border-color: var(--ln2); }
+.route.last { border-color: color-mix(in srgb, var(--au) 55%, var(--ln)); }
+.route.lock { opacity: .5; cursor: default; }
+.route .ri2 { width: 36px; height: 36px; flex: none; border-radius: 10px; background: var(--p2); color: var(--au); display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.route .rtx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.route .rtx b { font-weight: 600; font-size: 14px; }
+.route .rtx small { font-size: 11px; color: var(--mu); line-height: 1.3; }
+.route .rstats { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; max-width: 190px; }
+.rt { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 600; padding: 3px 7px; border-radius: 7px; background: var(--p2); color: var(--tx); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rt.up { color: var(--ok); } .rt.down { color: var(--no); }
+.game.fit .route { padding: 6px 10px; }
+.game.fit .route:not(.lock) .rtx small { display: none; }
+
+/* Kozmetikler */
+button.ava { border: 0; padding: 0; font: inherit; cursor: pointer; }
+.ava.big { width: 64px; height: 64px; border-radius: 16px; font-size: 38px; flex: none; }
+.wardhead { display: flex; align-items: center; gap: 14px; text-align: left; margin-bottom: 12px; }
+.wgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+.witem { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-radius: 12px; background: var(--bg); border: 1px solid var(--ln); color: var(--tx); cursor: pointer; font: inherit; }
+.witem.on { border-color: var(--au); box-shadow: 0 0 0 1px var(--au); }
+.witem.off { cursor: default; }
+.witem .wsw { width: 44px; height: 44px; border-radius: 12px; background: var(--au); color: #2a1d00; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+.witem.off .wsw { filter: grayscale(.6) brightness(.7); }
+.witem .wnm { font-size: 12px; font-weight: 600; text-align: center; }
+.wst { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 7px; background: var(--p2); color: var(--mu); }
+.wst.on { color: var(--ok); } .wst.buy { color: var(--gem); } .wst.poor { color: var(--dm); } .wst.lockd { color: var(--au); font-weight: 500; }
+.game.fit .ava.big { width: 48px; height: 48px; font-size: 28px; }
+.game.fit .wgrid { grid-template-columns: repeat(4, 1fr); }
+.game.fit .witem { padding: 7px 4px; }

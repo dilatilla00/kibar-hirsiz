@@ -352,14 +352,27 @@
     });
     return { usedUp, broken };
   }
-  function startHeist(id) {
+  // Soygun planı: giriş yolları
+  const ROUTES = E.routes || [{ id: 'kapi', name: '', fx: {} }], routeById = by(ROUTES);
+  const routeOpen = (r, t) => (!r.req || !r.req.skill || has(r.req.skill)) && (!r.tiers || r.tiers.includes(t.tier));
+  const routeWhy = r => r.req && r.req.skill && !has(r.req.skill) ? ((skillById[r.req.skill] || {}).name || r.req.skill) + ' yeteneği gerekli' : r.tiers ? 'Sadece ' + r.tiers.map(id => (tierById[id] || {}).name || id).join(' ve ').toLocaleLowerCase('tr-TR') + ' için' : '';
+  function routePreview(t, rid) {
+    const r = routeById[rid] || ROUTES[0], f = r.fx || {};
+    const times = heistTimes(t).map(x => Math.max(5, Math.round(x * (f.time || 1))));
+    return { p: Math.max(5, Math.min(95, odds(t).p + (f.p || 0))), total: times.reduce((a, b) => a + b, 0), times, open: routeOpen(r, t), why: routeWhy(r) };
+  }
+  function startHeist(id, rid) {
     const t = targetById[id];
     if (S.heist || !t || !targetOpen(t) || cooldownLeft(t) > 0 || cityOf(t) !== S.city) return false;
-    const times = heistTimes(t).slice();
+    const route = routeById[rid] || ROUTES[0];
+    if (!routeOpen(route, t)) return false;
+    const rf = route.fx || {}, pv = routePreview(t, route.id);
+    const times = pv.times.slice();
+    S.lastRoute = route.id;
     S.heist = {
       id, start: Date.now(), times, events: scheduleEvents(t, times), log: [],
       tools: S.tools.filter(x => { const tl = toolById[x]; return tl && (tl.uses || toolHelps(tl, t)); }),
-      snap: { p: odds(t).p, loot: lootMult() + (nightFx('loot') || 0), xp: 1 + buffSum('xpBoost') + (nightFx('xp') || 0), night: (tonight() || {}).id, safe: buffSum('safeFail') > 0, used: S.buffs.map(b => itemById[b].name) },
+      snap: { p: pv.p, route: route.id, heat: rf.heat || 1, loot: lootMult() + (nightFx('loot') || 0) + (rf.loot || 0), xp: 1 + buffSum('xpBoost') + (nightFx('xp') || 0), night: (tonight() || {}).id, safe: buffSum('safeFail') > 0, used: S.buffs.map(b => itemById[b].name) },
     };
     S.buffs = [];
     save(); return true;
@@ -541,7 +554,7 @@
       res.xp = Math.round(t.xp / 4 * xpMult); S.xp += res.xp;
       S.stats.fail++; S.streak = 0;
       if (safe) { res.safe = true; res.news = addNews('fail', t); }
-      else if (Math.random() < 0.5 * heatMult()) {
+      else if (Math.random() < 0.5 * heatMult() * (snap.heat || 1)) {
         if (S.heat >= 5) {
           res.caught = true; res.lost = Math.round(S.money * 0.3);
           S.money -= res.lost; S.heat = 2; S.day += 3; S.stats.caught++;
@@ -588,6 +601,36 @@
     const out = { good: g, price: o.price, fence: fenceById[fid] };
     if (o.risk && Math.random() < o.risk) { S.heat = Math.min(5, S.heat + 1); out.heatUp = true; }
     save(); return out;
+  }
+
+  // Kozmetikler: simge ve renk. Elmasla alınır ya da başarımla açılır.
+  const COS = E.cosmetics || { icons: [], colors: [] };
+  const cosList = kind => COS[kind] || [];
+  const cosItem = (kind, id) => cosList(kind).find(x => x.id === id);
+  function cosOwned(kind, id) {
+    const it = cosItem(kind, id); if (!it) return false;
+    if (it.ach) return !!(S.ach || {})[it.ach];
+    return !it.gems || ((S.cos || {}).own || []).includes(kind + ':' + id);
+  }
+  function cosEquipped(kind) {
+    const c = S.cos || {}, id = kind === 'icons' ? c.icon : c.color;
+    return id && cosOwned(kind, id) ? id : (cosList(kind)[0] || {}).id;
+  }
+  function cosLook() {
+    const ic = cosItem('icons', cosEquipped('icons')) || { icon: E.heroIcon }, col = cosItem('colors', cosEquipped('colors')) || {};
+    return { icon: ic.icon, bg: col.bg || '', fg: col.fg || '' };
+  }
+  function equipCos(kind, id) {
+    if (!cosOwned(kind, id)) return false;
+    S.cos = S.cos || { own: [] };
+    if (kind === 'icons') S.cos.icon = id; else S.cos.color = id;
+    save(); return true;
+  }
+  function buyCos(kind, id) {
+    const it = cosItem(kind, id);
+    if (!it || it.ach || cosOwned(kind, id) || S.gems < it.gems) return false;
+    S.gems -= it.gems; S.cos = S.cos || { own: [] }; S.cos.own = S.cos.own || []; S.cos.own.push(kind + ':' + id);
+    equipCos(kind, id); return true;
   }
 
   function scout(id) {
@@ -764,6 +807,7 @@
     market, marketState, buyMarket, gemRates, sellGem, buyGem, activeBuffs, immediate,
     crewSlots, crewCount, crewCut, crewState, trainCost, hire, train, dismiss,
     xpCap, tierOpen, targetOpen, cooldownLeft, scoutCost, requirements, odds, dateOf,
+    routes: ROUTES, routeById, routeOpen, routePreview, cosList, cosOwned, cosEquipped, cosLook, equipCos, buyCos,
     tonight, nightP, chooseMini, miniSetup, fenceById, fenceOffer, haggle, haggleChance, sellGood,
     achById, achState, checkAch, touch, awayCheck, crewEarnings, dailyState, claimDaily, quest, questDone, claimQuest, skillState, canSkipQuest, skipQuest, canAd, adReward, addGems,
     pickPattern, rob, startHeist, heistStatus, finishHeist, rushCost, rush, heistTimes, baseTimes, choose, choiceChance, choicePenalty, choiceOpen, reqText, rushTarget,
