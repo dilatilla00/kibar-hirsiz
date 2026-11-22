@@ -35,6 +35,7 @@ window.UI_EN = {
     'REKLAM': 'AD', 'Geri dön': 'Go back', 'Dil · Language': 'Language', 'Bitti:': 'Used up:', 'Kullanıldı:': 'Used:', 'Önce:': 'Requires:',
     'Sonraki:': 'Next:', 'Yardım eden:': 'Helped by:', 'Başarım:': 'Achievement:', 'Yeni görev:': 'New quest:', 'Bu gece:': 'Tonight:',
     'iPhone ayarlarından kapalı': 'Off in iPhone settings', 'Ustalık': 'Mastery', 'Seviye': 'Level',
+    'Devam': 'Continue', 'Aletler': 'Tools', 'Yetenekler': 'Skills', 'Yakalanma': 'Times caught',
   },
   rules: [
     ["Seviye (\\d+)'de sınırsız gelişen Ustalık açılır\\.", 'At level $1, Mastery unlocks and keeps growing without limit.'],
@@ -158,6 +159,7 @@ window.UI_EN = {
     ' işi sürüyor, ': ' — job in progress, ', ' gevşedi: ': ' eased: ', ' seni unuttu: ': ' forgot about you: ', '. Sokaklar yine senin.': '. The streets are yours again.',
     'Ekibin': 'Your crew', ' sen yokken ufak işler çevirdi: ': ' did some small jobs while you were away: ',
     'Günlük ödülün hazır: ': 'Your daily reward is ready: ', ' ve ': ' and ',
+    'Tamamlanan set:': 'Sets completed:', 'Yer:': 'Slots:',
     'Ekip payı ': 'Crew cut ', 'Hızlandır ·': 'Speed up ·', 'Soyuldu ·': 'Robbed ·', 'Süre ': 'Time ', 'Şans ': 'Odds ', 'Yardım eden:': 'Helped by:', 'Koleksiyonunda': 'In your collection',
     // Bildirimler
     'Beklenmedik bir şey oldu': 'Something unexpected happened', ': iş durdu, ne yapacağına sen karar ver.': ': the job has stopped — your call.',

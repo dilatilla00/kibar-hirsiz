@@ -24,7 +24,7 @@ window.I18N = (function () {
       if (typeof v === 'string') { if (!SKIP.has(k)) o[k] = tr(v); } else translateContent(v, k);
     }
   }
-  const tr = s => (window.ERA_EN && ERA_EN[h(s)]) || s;
+  const tr = s => (en && window.ERA_EN && typeof s === 'string' && ERA_EN[h(s)]) || s;
   if (en && window.ERA) {
     translateContent(window.ERA, '');
     // Tek kelimelik küçük harfli adlar özetle çevrilmez, elle:

@@ -213,3 +213,78 @@ Oyunda 27 başarım var. Oyuncu Game Center'a girmişse başarımlar ve iki sır
 5. Uygulama sürümünün sayfasında **Game Center** kutusunu işaretle ve sıralama ile başarımları sürüme ekle.
 
 Kimlikler `eras/1920/content.js` içindeki `achievements` listesinden gelir (`kh_` + id). Yeni başarım eklersen App Store Connect'e de aynı kimlikle eklemelisin.
+
+## Sürüm 1.1: İngilizce ve ödüllü reklamlar (hazırlık)
+
+Kod hazır: oyun İngilizce de oynanabiliyor (telefon dili Türkçe değilse İngilizce açılır, Ayarlar'dan değiştirilebilir) ve iOS uygulamasında ödüllü reklamlar AdMob ile çalışıyor. Şimdilik Google'ın **test** reklam kimlikleri kullanılıyor; gerçek para kazandırmazlar.
+
+### 1. AdMob hesabı (sen)
+1. admob.google.com → Google hesabınla kaydol (ödeme bilgileri ve vergi formu istenir).
+2. **Uygulamalar → Uygulama ekle → iOS**. Uygulama App Store'da yayındaysa "Kibar Hırsız"ı arayıp seç; değilse "Henüz yayınlanmadı" deyip adını yaz.
+3. Uygulamanın sayfasında **Reklam birimleri → Reklam birimi ekle → Ödüllü**. Ad: `Odul`. Ödül ayarlarına dokunma (oyun ödülü kendisi veriyor).
+4. Bana iki kimliği gönder:
+   - **Uygulama kimliği**: `ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY` (içinde `~` var)
+   - **Ödüllü reklam birimi kimliği**: `ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ` (içinde `/` var)
+5. **Gizlilik ve mesajlar** bölümünde **AB onay mesajı (GDPR)** oluştur ve yayınla. İstersen **IDFA açıklama mesajı** da ekleyebilirsin (izin penceresinden önce kısa bir açıklama gösterir).
+
+### 2. Benim yapacaklarım (kimlikler gelince)
+- Info.plist: `GADApplicationIdentifier` ve `KHRewardedAdUnitID` gerçek kimliklerle.
+- `privacy-1.1.html` içeriğini `privacy.html`'e taşımak (reklam verileri, izinler, KVKK).
+- `app-ads.txt` dosyasını AdMob'un verdiği satırla web sitesinin köküne koymak.
+- Sürüm 1.1 (derleme 4+) arşivleyip yüklemek.
+
+### 3. App Store Connect'te 1.1 için (sen)
+- **Uygulama Gizliliği**: "Veri toplamıyoruz" yerine AdMob için şunları işaretle (Google'ın önerisi):
+  - **Konum → Yaklaşık konum**: Üçüncü taraf reklam, Analiz · Kimliğe bağlı değil · İzleme için kullanılıyor: Evet
+  - **Tanımlayıcılar → Cihaz kimliği**: Üçüncü taraf reklam, Analiz · Kimliğe bağlı değil · İzleme: Evet
+  - **Kullanım verisi → Ürün etkileşimi, Reklam verileri**: Üçüncü taraf reklam, Analiz · İzleme: Evet
+  - **Teşhis → Çökme verileri, Performans verileri, Diğer teşhis verileri**: Analiz · İzleme: Hayır
+- **Yaş derecelendirmesi**: Adım 1'deki **Reklam** sorusu → **Evet**.
+- **Yeni dil ekle → English (U.S.)**: aşağıdaki İngilizce metinler ve `ios/store/screenshots-en-6.3/` klasöründeki 8 İngilizce görüntü.
+- Açıklamadaki "reklam yoktur" cümlesi kaldırıldı (aşağıdaki Türkçe metni kullan).
+
+### Türkçe açıklamanın 1.1 son satırı
+> İnternet gerekmez. İsteğe bağlı ödüllü reklamlar dışında reklam yoktur.
+
+### İngilizce mağaza metinleri (English U.S.)
+
+**Name:** Kibar Hırsız
+
+**Subtitle** (30): `The gentleman thief, 1924`
+
+**Promotional text** (170):
+> From humble houses to the Palace Treasury, from Istanbul to the casino of Monte Carlo: the story of a gentleman thief. Plan, build your crew, leave no trace.
+
+**Description:**
+> Istanbul, 1924. The nights are long, the mansions quiet, the museums thought to be safe. You are Kibar Hırsız — the gentleman thief who never harms a soul, yet no lock can stop.
+>
+> START SMALL, BECOME A LEGEND
+> Begin with a shoemaker's house in Fatih and work your way up to shops, stores, museums and, finally, the Palace Treasury. Every target has a chance of success, and you are the one who changes it.
+>
+> PLAN YOUR WAY IN
+> Over the roof, through the coal cellar, or in through the front door disguised as a butler? Every route has a price. And check tonight's weather: in the fog nobody sees you, on holiday nights the houses are empty, under a full moon everything is lit up.
+>
+> REAL-TIME HEISTS
+> Silent entry, the heist and the escape play out in real time. A dog barks, a watchman blows his whistle, a lock jams. You decide what to do — or pick the lock and crack the safe with your own hands.
+>
+> BUILD YOUR CREW
+> A lookout, a locksmith, a driver, a smuggler... Each member has a skill and takes a cut. They even pull small jobs while you're away.
+>
+> FENCES AND THE BLACK MARKET
+> Sell the silver candlesticks, pearl necklaces and jeweled daggers from your heists. One fence is safe but stingy, another generous but watched by the police. Haggling is up to you.
+>
+> SEE THE WORLD
+> When Istanbul gets too small, Athens, Cairo, Paris and Monte Carlo await. The greatest prize of all: the Monte Carlo Casino.
+>
+> COLLECTIONS AND ACHIEVEMENTS
+> The Byzantine crown, the pharaoh's mask, the princess's jewels... Complete sets, earn 27 achievements and give your character a new look.
+>
+> A NEW NIGHT EVERY DAY
+> Daily rewards, nightly weather and notifications when a heist is done. The game never ends: security grows with every job, and every city has a new challenge.
+>
+> No internet required. No ads except optional rewarded ads.
+
+**Keywords** (100): `thief,heist,robbery,istanbul,strategy,idle,tycoon,crew,museum,safe,1920s,gentleman,casino,simulation`
+
+**Support URL:** `https://dilatilla00.github.io/kibar-hirsiz/support.html#en`
+**Privacy Policy URL:** `https://dilatilla00.github.io/kibar-hirsiz/privacy.html`
