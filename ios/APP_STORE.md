@@ -91,7 +91,7 @@ https://appstoreconnect.apple.com → **Uygulamalar** → **+** → **Yeni Uygul
 
 ## 5. Ekran görüntüleri
 
-`ios/store/screenshots-6.9/` klasöründe 8 adet 2868×1320 yatay görüntü var (sırayla yükle; 7. başarımlar, 8. soygun sırasında bir olay). Bunları **iPhone 6.9" ekran** bölümüne yükle. Apple bu boyuttan diğer iPhone boyutlarını kendisi türetir.
+`ios/store/screenshots-6.3/` klasöründe 8 adet 2622×1206 yatay görüntü var ("iPhone with Dynamic Island (medium display)" alanı için; 6.9" boyutlu asılları `screenshots-6.9/` içinde) (sırayla yükle; 7. başarımlar, 8. soygun sırasında bir olay). Bunları **iPhone 6.9" ekran** bölümüne yükle. Apple bu boyuttan diğer iPhone boyutlarını kendisi türetir.
 
 ## 6. Uygulama gizliliği
 
