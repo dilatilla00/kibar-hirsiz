@@ -12,10 +12,10 @@ window.Shop = (function () {
   // Paketler. product: App Store Connect'te açılacak ürün kimliği. price: test modunda görünen fiyat;
   // gerçek modda fiyat App Store'dan (ülkeye göre) gelir.
   const packs = [
-    { product: 'com.dilatilla.kibarhirsiz.gems10', name: 'Bir avuç elmas', gems: 10, bonus: 0, price: '₺49,99', icon: 'diamond' },
-    { product: 'com.dilatilla.kibarhirsiz.gems30', name: 'Elmas kesesi', gems: 30, bonus: 3, price: '₺129,99', icon: 'diamonds' },
-    { product: 'com.dilatilla.kibarhirsiz.gems80', name: 'Elmas sandığı', gems: 80, bonus: 15, price: '₺299,99', icon: 'box', best: true },
-    { product: 'com.dilatilla.kibarhirsiz.gems200', name: 'Saray hazinesi', gems: 200, bonus: 50, price: '₺649,99', icon: 'crown' },
+    { product: 'com.kibarhirsiz.oyun.gems10', name: 'Bir avuç elmas', gems: 10, bonus: 0, price: '₺49,99', icon: 'diamond' },
+    { product: 'com.kibarhirsiz.oyun.gems30', name: 'Elmas kesesi', gems: 30, bonus: 3, price: '₺129,99', icon: 'diamonds' },
+    { product: 'com.kibarhirsiz.oyun.gems80', name: 'Elmas sandığı', gems: 80, bonus: 15, price: '₺299,99', icon: 'box', best: true },
+    { product: 'com.kibarhirsiz.oyun.gems200', name: 'Saray hazinesi', gems: 200, bonus: 50, price: '₺649,99', icon: 'crown' },
   ];
 
   let mode = MODE;

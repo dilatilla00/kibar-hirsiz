@@ -6,7 +6,7 @@ Bu klasörde App Store için gerekenlerin hepsi hazır: Xcode projesi, uygulama 
 
 "Welcome to the Apple Developer Program" e-postası gelince şu sırayla ilerle. Hepsi birkaç saat sürer; sonrası Apple'ın incelemesi (genelde 1–2 gün).
 
-1. **Adı ayırt (5 dk).** appstoreconnect.apple.com → **Uygulamalar → +  → Yeni Uygulama**. Platform iOS, ad **Kibar Hırsız**, dil Türkçe, SKU `kibarhirsiz`. Paket kimliği listede yoksa önce 2. adımı yap, sonra dön. Ad alınmışsa "Kibar Hırsız: İstanbul 1924" gibi bir ek dene.
+1. **Adı ayırt (5 dk).** appstoreconnect.apple.com → **Uygulamalar → +  → Yeni Uygulama**. Platform iOS, ad **Kibar Hırsız**, birincil dil Türkçe, paket kimliği **com.kibarhirsiz.oyun**, SKU `kibarhirsiz`. Ad alınmışsa "Kibar Hırsız: İstanbul 1924" gibi bir ek dene.
 2. **Xcode'a hesabı ekle (5 dk).** Xcode → Settings → Accounts → + → yeni Apple ID. Sonra Claude'a haber ver: takımı değiştirir, gerekirse paket kimliğini yenisine çevirir, uygulamayı imzalayıp App Store Connect'e yükler.
 3. **Mağaza sayfası (30–45 dk).** Aşağıdaki 4–8. bölümleri doldur: metinler, 8 ekran görüntüsü, gizlilik ("Veri toplamıyoruz"), yaş derecelendirmesi. Gizlilik politikası adresi: https://dilatilla00.github.io/kibar-hirsiz/privacy.html, destek adresi: https://dilatilla00.github.io/kibar-hirsiz/support.html
 4. **Derlemeyi seç ve incelemeye gönder (10 dk).** Yükleme 10–30 dakikada "işleniyor"dan çıkar. Sürüm sayfasında **Derleme** bölümünden seç, **İncelemeye Gönder**.
@@ -23,7 +23,7 @@ Bu klasörde App Store için gerekenlerin hepsi hazır: Xcode projesi, uygulama 
 1. `ios/KibarHirsiz.xcodeproj` dosyasına çift tıkla.
 2. Soldan **KibarHirsiz** projesini, ardından **Signing & Capabilities** sekmesini seç.
 3. **Team** kısmından kendi geliştirici hesabını seç.
-4. **Bundle Identifier** şu an `com.dilatilla.kibarhirsiz`. İstersen değiştirebilirsin, ama App Store'a yükledikten sonra değiştirilemez.
+4. **Bundle Identifier** `com.kibarhirsiz.oyun` (ücretli takıma kayıtlı). App Store'a yükledikten sonra değiştirilemez.
 5. Üstten bir iPhone simülatörü seçip ▶ düğmesine bas ve oyunun açıldığını gör.
 
 Oyunun web dosyaları her derlemede `ios/sync-web.sh` ile kendiliğinden uygulamanın içine kopyalanır. Oyunda bir değişiklik yaptığında ayrıca bir şey yapman gerekmez.
@@ -37,7 +37,7 @@ https://appstoreconnect.apple.com → **Uygulamalar** → **+** → **Yeni Uygul
 | Platform | iOS |
 | Ad | Kibar Hırsız (alınmışsa: "Kibar Hırsız: İstanbul 1924") |
 | Birincil dil | Türkçe |
-| Paket kimliği | com.dilatilla.kibarhirsiz |
+| Paket kimliği | com.kibarhirsiz.oyun |
 | SKU | kibarhirsiz-001 |
 
 ## 4. Mağaza metinleri
@@ -149,10 +149,10 @@ Oyunda 5 ödüllü reklam noktası hazır; ilk sürümde hiçbiri görünmez.
 
 | Paket | Elmas | Hediye | Ürün kimliği (App Store Connect) | Öneri fiyat |
 |---|---|---|---|---|
-| Bir avuç elmas | 10 | — | com.dilatilla.kibarhirsiz.gems10 | ₺49,99 |
-| Elmas kesesi | 30 | +3 | com.dilatilla.kibarhirsiz.gems30 | ₺129,99 |
-| Elmas sandığı | 80 | +15 | com.dilatilla.kibarhirsiz.gems80 | ₺299,99 |
-| Saray hazinesi | 200 | +50 | com.dilatilla.kibarhirsiz.gems200 | ₺649,99 |
+| Bir avuç elmas | 10 | — | com.kibarhirsiz.oyun.gems10 | ₺49,99 |
+| Elmas kesesi | 30 | +3 | com.kibarhirsiz.oyun.gems30 | ₺129,99 |
+| Elmas sandığı | 80 | +15 | com.kibarhirsiz.oyun.gems80 | ₺299,99 |
+| Saray hazinesi | 200 | +50 | com.kibarhirsiz.oyun.gems200 | ₺649,99 |
 
 - Mod `js/shop.js` içindeki `MODE` ile seçilir: `off`, `test` (sahte ödeme), `on` (gerçek ödeme).
 - Tarayıcıda denemek için `?shop=test`; kapatmak için `?shop=off`.
