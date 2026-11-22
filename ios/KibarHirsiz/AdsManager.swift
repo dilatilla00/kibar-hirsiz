@@ -9,10 +9,19 @@ import AppTrackingTransparency
 final class AdsManager: NSObject, FullScreenContentDelegate {
     static let shared = AdsManager()
 
-    /// Ödüllü reklam birimi. Info.plist'teki KHRewardedAdUnitID (AdMob hesabındaki gerçek kimlik) kullanılır;
-    /// yoksa Google'ın resmi test kimliği (para kazandırmaz, sadece denemek içindir).
-    private let unitID = (Bundle.main.object(forInfoDictionaryKey: "KHRewardedAdUnitID") as? String)
-        .flatMap { $0.isEmpty ? nil : $0 } ?? "ca-app-pub-3940256099942544/1712485313"
+    /// Ödüllü reklam birimi. Yayın (Release/App Store) derlemesinde Info.plist'teki KHRewardedAdUnitID
+    /// (AdMob hesabındaki gerçek kimlik) kullanılır. Xcode'dan çalıştırılan Debug derlemesinde ise her zaman
+    /// Google'ın resmi test kimliği kullanılır: geliştirirken kendi gerçek reklamlarımıza tıklamak
+    /// AdMob kurallarına aykırıdır ve hesabın kapatılmasına yol açabilir.
+    private static let testUnitID = "ca-app-pub-3940256099942544/1712485313"
+    private let unitID: String = {
+        #if DEBUG
+        return AdsManager.testUnitID
+        #else
+        return (Bundle.main.object(forInfoDictionaryKey: "KHRewardedAdUnitID") as? String)
+            .flatMap { $0.isEmpty ? nil : $0 } ?? AdsManager.testUnitID
+        #endif
+    }()
 
     private var prepared = false
     private var started = false

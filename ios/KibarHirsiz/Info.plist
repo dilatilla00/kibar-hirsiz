@@ -8,11 +8,11 @@
 		<string>en</string>
 	</array>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-3940256099942544~1458002511</string>
+	<string>ca-app-pub-5651968244627563~8917118718</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>KHRewardedAdUnitID</key>
-	<string></string>
+	<string>ca-app-pub-5651968244627563/2230175459</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Bu izin, sana daha ilgili reklamlar gösterilmesi için kullanılır. İzin vermesen de oyundaki ödüllü reklamları izleyebilirsin.</string>
 	<key>SKAdNetworkItems</key>
