@@ -54,23 +54,26 @@ https://appstoreconnect.apple.com → **Uygulamalar** → **+** → **Yeni Uygul
 > KÜÇÜKTEN BAŞLA, EFSANE OL
 > Fatih'teki bir kunduracının evinden başla; dükkânlara, mağazalara, müzelere ve sonunda Saray Hazinesi'ne uzan. Her hedefin bir başarı şansı var ve bu şansı sen değiştirirsin.
 >
+> PLANINI YAP
+> Çatıdan mı gireceksin, kömürlükten mi, yoksa uşak kılığında ön kapıdan mı? Her yolun bir bedeli var. Bu gecenin havasına da bak: sisli gecede kimse seni görmez, bayram gecesi evler boştur, dolunayda her yer aydınlıktır.
+>
 > GERÇEK ZAMANLI SOYGUNLAR
-> Sessiz giriş, soygun ve kaçış gerçek zamanlı ilerler. Yolda bir köpek havlar, bekçi düdük çalar, kasanın şifresi tutmaz. Ne yapacağına sen karar verirsin: risk mi alırsın, geri mi çekilirsin?
+> Sessiz giriş, soygun ve kaçış gerçek zamanlı ilerler. Yolda bir köpek havlar, bekçi düdük çalar, kilit sıkışır. Ne yapacağına sen karar verirsin; kilidi ve kasayı kendi ellerinle açmayı da deneyebilirsin.
 >
 > EKİBİNİ KUR
-> Gözcü, kilitçi, şoför, kaçakçı... Her ekip üyesinin kendi yeteneği ve kendi payı var. Onları eğit, birlikte büyüyün.
+> Gözcü, kilitçi, şoför, kaçakçı... Her ekip üyesinin kendi yeteneği ve kendi payı var. Sen yokken bile ufak işler çevirirler.
 >
-> YETENEKLER VE ALETLER
-> Maymuncuktan sahte kimliğe, onlarca alet ve yetenekle her yeni kapıyı aç. Ustalık sistemiyle sınırları aş.
+> YATAKÇILAR VE KARABORSA
+> Soygundan çıkan gümüş şamdanı, inci kolyeyi, murassa hançeri yatakçılara sat. Biri güvenli ama cimri, biri cömert ama zabıtanın gözü üstünde. Pazarlık senin elinde.
 >
 > DÜNYAYA AÇIL
 > İstanbul sana dar gelince Atina, Kahire, Paris ve Monte Carlo seni bekler. En büyük vurgun: Monte Carlo kumarhanesi.
 >
-> EFSANE KOLEKSİYONU
-> Bizans tacı, firavun maskesi, prenses mücevherleri... Setleri tamamla, kalıcı güçler kazan.
+> KOLEKSİYON VE BAŞARIMLAR
+> Bizans tacı, firavun maskesi, prenses mücevherleri... Setleri tamamla, 27 başarımı topla, karakterine yeni bir görünüm seç.
 >
-> SONU OLMAYAN BİR YOLCULUK
-> Oyun bitmez: güvenlik her soygunla artar, her şehirde yeni bir meydan okuma vardır.
+> HER GÜN YENİ BİR GECE
+> Günlük ödüller, her gün değişen gece havası ve soygun bitince gelen bildirimler. Oyun bitmez: güvenlik her soygunla artar, her şehirde yeni bir meydan okuma vardır.
 >
 > İnternet gerekmez, reklam yoktur, hiçbir veri toplanmaz.
 
@@ -83,7 +86,7 @@ https://appstoreconnect.apple.com → **Uygulamalar** → **+** → **Yeni Uygul
 | Destek URL'si | https://dilatilla00.github.io/kibar-hirsiz/support.html |
 | Gizlilik politikası URL'si | https://dilatilla00.github.io/kibar-hirsiz/privacy.html |
 | Pazarlama URL'si (isteğe bağlı) | https://dilatilla00.github.io/kibar-hirsiz/ |
-| Telif hakkı | 2026 (senin adın) |
+| Telif hakkı | 2026 Atilla Dil |
 | Fiyat | Ücretsiz (ya da sen nasıl istersen) |
 
 ## 5. Ekran görüntüleri
