@@ -695,7 +695,8 @@
         ${window.Notify && Notify.supported ? (Notify.status === 'denied'
           ? `<button class="b2 tgl" disabled>${ic('bell-off')}Bildirimler<span class="sw">iPhone ayarlarından kapalı</span></button>`
           : `<button class="b2 tgl ${Notify.on ? 'on' : ''}" data-act="togglenotify">${ic(Notify.on ? 'bell-ringing' : 'bell-off')}Soygun bildirimleri<span class="sw">${Notify.on ? 'Açık' : 'Kapalı'}</span></button>`) : ''}
-        <button class="b2" data-act="askreset">${ic('refresh')}Yeni oyun başlat</button><button class="b1" data-act="close">Kapat</button>`;
+        <button class="b2" data-act="askreset">${ic('refresh')}Yeni oyun başlat</button><button class="b1" data-act="close">Kapat</button>
+        <p class="credits">Yazı tipleri: Inter, Playfair Display (SIL Open Font License 1.1) · Simgeler: Tabler Icons (MIT) · Lisans metinleri uygulamanın içinde, vendor klasöründe.</p>`;
     }
     if (m.type === 'dismiss') {
       const c = G.crewById[m.id];
