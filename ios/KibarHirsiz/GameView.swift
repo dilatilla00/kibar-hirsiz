@@ -19,6 +19,7 @@ struct GameView: UIViewRepresentable {
         config.userContentController.add(context.coordinator, name: "notify")
         config.userContentController.add(context.coordinator, name: "haptic")
         config.userContentController.add(context.coordinator, name: "gc")
+        config.userContentController.add(context.coordinator, name: "ads")
         config.userContentController.addUserScript(WKUserScript(source: """
             window.addEventListener('error', e => webkit.messageHandlers.log.postMessage('JS hata: ' + e.message + ' @ ' + e.filename + ':' + e.lineno));
             window.addEventListener('unhandledrejection', e => webkit.messageHandlers.log.postMessage('JS hata: ' + e.reason));
@@ -56,6 +57,19 @@ struct GameView: UIViewRepresentable {
             switch message.name {
             case "ready": loaded.wrappedValue = true; return // açılış ekranı çizildi
             case "haptic": Haptics.play(message.body as? String ?? "light"); return
+            case "ads":
+                guard let m = message.body as? [String: Any] else { return }
+                let js: (String) -> Void = { [weak self] code in self?.web?.evaluateJavaScript(code) }
+                switch m["op"] as? String {
+                case "init":
+                    AdsManager.shared.prepare { needsPrivacy in js("window.Ads && Ads._privacy(\(needsPrivacy))") }
+                case "privacy":
+                    AdsManager.shared.showPrivacyOptions()
+                default:
+                    let id = m["id"] as? Int ?? 0
+                    AdsManager.shared.show { result in js("window.Ads && Ads._done(\(id), '\(result)')") }
+                }
+                return
             case "gc":
                 if let m = message.body as? [String: Any] {
                     GameCenter.shared.handle(m) { [weak self] ok, alias in

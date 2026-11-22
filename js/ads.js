@@ -1,13 +1,14 @@
 // Ödüllü reklamlar. Oyun reklam sağlayıcısını bilmez; sadece Ads.enabled() ve Ads.show(yer) kullanır.
 //
 // Modlar:
-//   'off'  : reklam düğmeleri hiç görünmez (ilk App Store sürümü bu modda çıkar)
+//   'off'  : reklam düğmeleri hiç görünmez (1.0 sürümü bu modda çıktı)
 //   'test' : sahte bir reklam penceresi açılır; düğmeleri ve ödülleri denemek için
-//   'on'   : gerçek reklam. iOS uygulamasında yerel tarafa (AdMob) "ads" mesajıyla sorulur.
+//   'on'   : gerçek reklam. iOS uygulamasında yerel tarafa (AdMob) "ads" mesajıyla sorulur;
+//            tarayıcıda (köprü yokken) reklam düğmeleri görünmez.
 //
 // Mod seçimi: aşağıdaki MODE, ya da adres çubuğunda ?ads=test / ?ads=off (bu cihazda hatırlanır).
 window.Ads = (function () {
-  const MODE = 'off';
+  const MODE = 'on';
 
   let mode = MODE;
   try {
@@ -19,10 +20,18 @@ window.Ads = (function () {
   const bridge = window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.ads;
   const enabled = () => mode === 'test' || (mode === 'on' && !!bridge);
 
-  // Yerel taraf reklam bitince window.Ads._done(id, true/false) çağırır.
+  // Yerel taraf reklam bitince window.Ads._done(id, sonuç) çağırır: 'ok' | 'skip' | 'noad' (ya da true/false)
   const pending = {};
-  let seq = 0;
-  function _done(id, ok) { const f = pending[id]; if (f) { delete pending[id]; f(!!ok); } }
+  let seq = 0, lastReason = '', privacyRequired = false;
+  function _done(id, r) {
+    const f = pending[id]; if (!f) return;
+    delete pending[id];
+    const ok = r === true || r === 'ok';
+    lastReason = ok ? 'ok' : (r === 'noad' ? 'noad' : 'skip');
+    f(ok);
+  }
+  // Oyun başlayınca yerel tarafa hazırlan de: onay/izin pencereleri ve SDK başlatma orada yapılır.
+  if (bridge && mode === 'on') document.addEventListener('gk:start', () => { try { bridge.postMessage({ op: 'init' }); } catch (e) { /* yoksay */ } });
 
   const NAMES = { rush: 'Soygunu hızlandır', double: 'Ganimeti ikiye katla', heat: 'Takibi düşür', gem: 'Bedava elmas', skip: 'Görev değiştir' };
   function testAd(placement) {
@@ -46,12 +55,20 @@ window.Ads = (function () {
 
   function show(placement) {
     if (!enabled()) return Promise.resolve(false);
-    if (mode === 'test') return testAd(placement);
+    if (mode === 'test') return testAd(placement).then(ok => { lastReason = ok ? 'ok' : 'skip'; return ok; });
     return new Promise(resolve => {
       const id = ++seq; pending[id] = resolve;
       try { bridge.postMessage({ id, placement }); } catch (e) { _done(id, false); }
     });
   }
 
-  return { enabled, show, _done, get mode() { return mode; } };
+  return {
+    enabled, show, _done,
+    get mode() { return mode; },
+    get lastReason() { return lastReason; },
+    // Avrupa gibi yerlerde oyuncu reklam onay tercihini sonradan değiştirebilmeli
+    get privacyRequired() { return privacyRequired; },
+    _privacy(v) { privacyRequired = !!v; },
+    privacyOptions() { try { bridge.postMessage({ op: 'privacy' }); } catch (e) { /* yoksay */ } },
+  };
 })();

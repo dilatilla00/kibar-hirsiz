@@ -695,6 +695,7 @@
         ${window.Notify && Notify.supported ? (Notify.status === 'denied'
           ? `<button class="b2 tgl" disabled>${ic('bell-off')}Bildirimler<span class="sw">iPhone ayarlarından kapalı</span></button>`
           : `<button class="b2 tgl ${Notify.on ? 'on' : ''}" data-act="togglenotify">${ic(Notify.on ? 'bell-ringing' : 'bell-off')}Soygun bildirimleri<span class="sw">${Notify.on ? 'Açık' : 'Kapalı'}</span></button>`) : ''}
+        ${window.Ads && Ads.privacyRequired ? `<button class="b2" data-act="adprivacy">${ic('shield-check')}Reklam gizlilik seçenekleri</button>` : ''}
         <button class="b2" data-act="askreset">${ic('refresh')}Yeni oyun başlat</button><button class="b1" data-act="close">Kapat</button>
         <p class="credits">Yazı tipleri: Inter, Playfair Display (SIL Open Font License 1.1) · Simgeler: Tabler Icons (MIT) · Lisans metinleri uygulamanın içinde, vendor klasöründe.</p>`;
     }
@@ -733,7 +734,7 @@
     adBusy = true;
     Ads.show(key).then(ok => {
       adBusy = false;
-      if (!ok) { toast(`${ic('player-stop', 'mu')}Reklam yarıda kaldı, ödül verilmedi`); return; }
+      if (!ok) { toast(Ads.lastReason === 'noad' ? `${ic('wifi-off', 'mu')}Şu an gösterilecek reklam yok, biraz sonra tekrar dene` : `${ic('player-stop', 'mu')}Reklam yarıda kaldı, ödül verilmedi`); return; }
       const out = G.adReward(key, res);
       if (out == null) return;
       snd(key === 'gem' ? 'gem' : key === 'double' ? 'success' : 'reward');
@@ -832,6 +833,7 @@
         case 'buygem': if (G.buyGem() && (snd('gem'), true)) toast(`${ic('diamond', 'gem')}Bir elmas alındı`); break;
         case 'menu': ui.modal = { type: 'menu' }; break;
         case 'ach': ui.modal = { type: 'ach' }; break;
+        case 'adprivacy': if (window.Ads) Ads.privacyOptions(); break;
         case 'night': ui.modal = { type: 'night' }; break;
         case 'mini': mgStart(); if (mg) ui.modal = { type: 'mini' }; break;
         case 'mtap': mgTap(); break;

@@ -12,6 +12,10 @@
 		A10000000000000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* Assets.xcassets */; };
 		A10000000000000000000004 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* PrivacyInfo.xcprivacy */; };
 		A10000000000000000000005 /* Web in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* Web */; };
+		A10000000000000000000006 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = A90000000000000000000001 /* GoogleMobileAds */; };
+		A10000000000000000000007 /* GoogleUserMessagingPlatform in Frameworks */ = {isa = PBXBuildFile; productRef = A90000000000000000000002 /* GoogleUserMessagingPlatform */; };
+		A10000000000000000000008 /* AdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* AdsManager.swift */; };
+		A10000000000000000000009 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,13 +26,29 @@
 		A20000000000000000000005 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		A20000000000000000000006 /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Web; sourceTree = "<group>"; };
 		A20000000000000000000007 /* KibarHirsiz.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KibarHirsiz.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000008 /* AdsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsManager.swift; sourceTree = "<group>"; };
+		A2000000000000000000000A /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A2000000000000000000000B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+/* Begin PBXVariantGroup section */
+		A20000000000000000000009 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A2000000000000000000000A /* tr */,
+				A2000000000000000000000B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A30000000000000000000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000006 /* GoogleMobileAds in Frameworks */,
+				A10000000000000000000007 /* GoogleUserMessagingPlatform in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +68,8 @@
 			children = (
 				A20000000000000000000001 /* KibarHirsizApp.swift */,
 				A20000000000000000000002 /* GameView.swift */,
+				A20000000000000000000008 /* AdsManager.swift */,
+				A20000000000000000000009 /* InfoPlist.strings */,
 				A20000000000000000000003 /* Assets.xcassets */,
 				A20000000000000000000004 /* Info.plist */,
 				A20000000000000000000005 /* PrivacyInfo.xcprivacy */,
@@ -81,6 +103,10 @@
 			dependencies = (
 			);
 			name = KibarHirsiz;
+			packageProductDependencies = (
+				A90000000000000000000001 /* GoogleMobileAds */,
+				A90000000000000000000002 /* GoogleUserMessagingPlatform */,
+			);
 			productName = KibarHirsiz;
 			productReference = A20000000000000000000007 /* KibarHirsiz.app */;
 			productType = "com.apple.product-type.application";
@@ -110,6 +136,10 @@
 				Base,
 			);
 			mainGroup = A40000000000000000000001;
+			packageReferences = (
+				A91000000000000000000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				A91000000000000000000002 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */,
+			);
 			productRefGroup = A40000000000000000000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +157,7 @@
 				A10000000000000000000003 /* Assets.xcassets in Resources */,
 				A10000000000000000000004 /* PrivacyInfo.xcprivacy in Resources */,
 				A10000000000000000000005 /* Web in Resources */,
+				A10000000000000000000009 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10000000000000000000008 /* AdsManager.swift in Sources */,
 				A10000000000000000000001 /* KibarHirsizApp.swift in Sources */,
 				A10000000000000000000002 /* GameView.swift in Sources */,
 			);
@@ -293,6 +325,37 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+/* Begin XCRemoteSwiftPackageReference section */
+		A91000000000000000000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+		A91000000000000000000002 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A90000000000000000000001 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A91000000000000000000001 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		A90000000000000000000002 /* GoogleUserMessagingPlatform */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A91000000000000000000002 /* XCRemoteSwiftPackageReference "swift-package-manager-google-user-messaging-platform" */;
+			productName = GoogleUserMessagingPlatform;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A60000000000000000000001 /* Project object */;
 }
