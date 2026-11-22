@@ -102,7 +102,10 @@
   // iOS uygulamasında oyuncu Game Center'a giriş yaptıysa başarımlar ve sıralamalar oraya da gönderilir.
   // Kimlikler: başarım "kh_<id>", sıralamalar "kh_loot" (toplam ganimet) ve "kh_level" (seviye).
   // Bunlar App Store Connect'te aynı kimliklerle tanımlanmalı (ios/APP_STORE.md).
-  const gb = bridge('gc');
+  // 1.0 sürümünde kapalı: Game Center App Store Connect'te tanımlanınca (1.1) true yapılır.
+  // Kapalıyken giriş istenmez, hiçbir şey gönderilmez; başarımlar oyun içinde çalışmaya devam eder.
+  const GC_ENABLED = false;
+  const gb = GC_ENABLED ? bridge('gc') : null;
   let gOk = false, alias = '', sent = {};
   const GC = {
     get available() { return gOk; },

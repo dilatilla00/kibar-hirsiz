@@ -169,6 +169,7 @@ Oyunda 27 başarım var. Oyuncu Game Center'a girmişse başarımlar ve iki sır
 Ücretsiz Apple hesabıyla Game Center kullanılamıyor. Bu yüzden yetenek (capability) şimdilik projeye eklenmedi; eklenirse ücretsiz hesapla telefona kurulum bozulur. Geliştirici hesabın onaylanınca:
 
 1. Xcode'da **KibarHirsiz → Signing & Capabilities → + Capability → Game Center** ekle.
+   Ayrıca `js/native.js` içindeki `GC_ENABLED` değerini `true` yap (1.0'da kapalı).
 2. App Store Connect'te uygulamanın **Hizmetler (Services) → Game Center** bölümüne gir.
 3. **Sıralamalar (Leaderboards)** bölümünde iki "Klasik, en yüksek puan" sıralaması oluştur:
 
