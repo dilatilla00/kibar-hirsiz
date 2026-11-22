@@ -4,8 +4,11 @@
   const $s = document.getElementById('splash');
   if (!$s) return;
   const q = sel => $s.querySelector(sel);
+  const L = s => (window.I18N ? I18N.L(s) : s);
 
   q('.sp-title').textContent = E.title;
+  const tipInit = q('.sp-tip'); if (tipInit) tipInit.textContent = L(tipInit.textContent);
+  q('.sp-play').textContent = L(q('.sp-play').textContent);
 
   // iOS uygulamasına "ekran çizildi" haberi ver (yerel amblem bu sinyalle kalkar)
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -46,10 +49,10 @@
   function showMenu() {
     clearInterval(tipTimer);
     const S = G.s, played = S.stats.robs > 0;
-    q('.sp-play').textContent = played ? 'Devam et' : 'Oyuna başla';
-    q('.sp-save').textContent = played
-      ? `Seviye ${S.lv} · ${Math.round(S.money).toLocaleString('tr-TR')} ${E.currency}`
-      : 'Yeni bir hikâye seni bekliyor';
+    q('.sp-play').textContent = L(played ? 'Devam et' : 'Oyuna başla');
+    q('.sp-save').textContent = L(played
+      ? `Seviye ${S.lv} · ${Math.round(S.money).toLocaleString((window.I18N ? I18N.locale : 'tr-TR'))} ${E.currency}`
+      : 'Yeni bir hikâye seni bekliyor');
     $s.classList.add('ready');
   }
 

@@ -573,3 +573,6 @@ button.ava { border: 0; padding: 0; font: inherit; cursor: pointer; }
 .game.fit .wgrid { grid-template-columns: repeat(4, 1fr); }
 .game.fit .witem { padding: 7px 4px; }
 .credits { font-size: 10px; color: var(--dm); margin: 12px 0 0; line-height: 1.4; }
+.langrow { display: flex; align-items: center; gap: 8px; padding: 8px 12px; margin-bottom: 8px; border: 1px solid var(--ln); border-radius: 11px; font-size: 13px; text-align: left; }
+.langrow > span { flex: 1; }
+.seg.sm { margin: 0; padding: 3px; } .seg.sm button { padding: 5px 10px; font-size: 12px; }

@@ -4,10 +4,13 @@
   const $ui = document.getElementById('ui'), $layer = document.getElementById('layer');
   const ui = { screen: 'hedef', tier: E.tiers[0].id, sel: null, modal: null }; // yeni oyunculara karşılama penceresi yerine başlangıç turu (tutorial.js) gösterilir
 
-  const fmt = n => Math.round(n).toLocaleString('tr-TR');
+  const fmt = n => Math.round(n).toLocaleString((window.I18N ? I18N.locale : 'tr-TR'));
+  const L = s => (window.I18N ? I18N.L(s) : s);
   const mmss = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
   const k = x => (x / 1000).toFixed(1).replace('.0', '').replace('.', ',');
-  const range = (a, b) => b >= 1000 ? `${k(a)}–${k(b)} bin` : `${a}–${b}`;
+  const EN = !!(window.I18N && I18N.en);
+  const TRX = s => (window.I18N ? I18N.tr(s) : s); // eski kayıtlarda Türkçe saklanmış metinler
+  const range = (a, b) => b >= 1000 ? (EN ? `${k(a).replace(',', '.')}–${k(b).replace(',', '.')}K` : `${k(a)}–${k(b)} bin`) : `${a}–${b}`;
   const ic = (name, color) => `<i class="ti ti-${name}"${color ? ` style="color:var(--${color})"` : ''} aria-hidden="true"></i>`;
   // Ödüllü reklam düğmesi: reklamlar kapalıysa ya da ödül şu an alınamıyorsa hiç görünmez.
   const adBtn = (key, label, res) => (window.Ads && Ads.enabled() && G.canAd(key, res))
@@ -22,7 +25,7 @@
   // Gecenin etkilerini okunur satırlara çevir
   function nightLines(n) {
     const f = n.fx || {}, out = [];
-    const where = f.tiers ? ' (' + f.tiers.map(id => (E.tiers.find(x => x.id === id) || {}).name || id).join(', ').toLocaleLowerCase('tr-TR') + ')' : '';
+    const where = f.tiers ? ' (' + f.tiers.map(id => (E.tiers.find(x => x.id === id) || {}).name || id).join(', ').toLocaleLowerCase((window.I18N ? I18N.locale : 'tr-TR')) + ')' : '';
     if (f.p) out.push({ icon: 'target', tone: f.p > 0 ? 'ok' : 'no', text: `Başarı şansı <b>${f.p > 0 ? '+' : ''}${f.p}</b>${where}` });
     if (f.heat) out.push({ icon: 'urgent', tone: f.heat < 1 ? 'ok' : 'no', text: `Fark edilme riski <b>%${Math.round(Math.abs(1 - f.heat) * 100)} ${f.heat < 1 ? 'az' : 'fazla'}</b>` });
     if (f.time) out.push({ icon: 'hourglass', tone: f.time < 1 ? 'ok' : 'wa', text: `Soygunlar <b>%${Math.round(Math.abs(1 - f.time) * 100)} ${f.time < 1 ? 'kısa' : 'uzun'}</b> sürer` });
@@ -101,7 +104,7 @@
     const c = $m.querySelector('[data-act=minicancel]'); if (c && (st.step || st.misses)) c.remove();
     if (st.done) {
       $m.querySelector('[data-act=mtap].b1')?.classList.add('off');
-      if (b && !$m.querySelector('.mres')) b.insertAdjacentHTML('afterend', `<div class="mres ${st.won ? 'ok' : 'no'}">${st.won ? (st.kind === 'lock' ? 'Açıldı!' : 'Kasa açıldı!') : 'Olmadı...'}</div>`);
+      if (b && !$m.querySelector('.mres')) b.insertAdjacentHTML('afterend', L(`<div class="mres ${st.won ? 'ok' : 'no'}">${st.won ? (st.kind === 'lock' ? 'Açıldı!' : 'Kasa açıldı!') : 'Olmadı...'}</div>`));
     }
   }
   // Tek seferlik ipuçları: oyuncu "Anladım" der ya da ekrandan/pencereden ayrılınca bir daha görünmez.
@@ -322,11 +325,11 @@
   // Gazete ekranı
   function scrGazete() {
     const S = G.s, st = S.stats;
-    const feed = S.news.map((n, i) => `<article class="news ${i === 0 ? 'lead' : ''}"><div class="d">${G.dateOf(n.day).toUpperCase()}</div><h3>${n.h}</h3><p>${n.b}</p></article>`).join('');
+    const feed = S.news.map((n, i) => `<article class="news ${i === 0 ? 'lead' : ''}"><div class="d">${G.dateOf(n.day).toUpperCase()}</div><h3>${TRX(n.h)}</h3><p>${TRX(n.b)}</p></article>`).join('');
     const canBribe = S.heat > 0 && S.gems >= E.bribeCost;
     return `<div class="paper"><div class="feed scroll"><div class="mast"><h1>${E.labels.newspaper}</h1><span>${G.dateOf(S.day)}</span></div>${tip('gazete', 'Yaptığın her iş ertesi sabah gazetede çıkar. Sağdaki bölümde zabıta takibini görürsün: dinlenerek ya da komisere rüşvet vererek azaltabilirsin. Ayrıca kariyer istatistiklerin burada.')}${feed}</div>
       <aside class="side scroll">
-        <h4>${G.heatLabel().toLocaleUpperCase('tr-TR')}</h4>
+        <h4>${G.heatLabel().toLocaleUpperCase((window.I18N ? I18N.locale : 'tr-TR'))}</h4>
         <div class="heat">${[0, 1, 2, 3, 4].map(i => `<i class="${i < S.heat ? 'on' : ''}"></i>`).join('')}</div>
         <div style="font-weight:500;margin:8px 0 4px">${E.labels.heatLevels[S.heat]}</div>
         <p class="mini" style="white-space:normal;line-height:1.5;margin:0 0 12px">${E.labels.heatInfo}</p>
@@ -373,7 +376,7 @@
   function scrFence() {
     const S = G.s, goods = S.goods || [], GD = E.goods || {};
     const card = g => `<div class="item good">
-      <div class="hd"><div class="ic">${ic(g.icon)}</div><div><div class="nm">${g.name}</div><div class="ds">${g.from} · ${catName[g.cat] || g.cat} · değeri ~${fmt(g.v)} ${E.currency}</div></div></div>
+      <div class="hd"><div class="ic">${ic(g.icon)}</div><div><div class="nm">${TRX(g.name)}</div><div class="ds">${TRX(g.from)} · ${catName[g.cat] || g.cat} · değeri ~${fmt(g.v)} ${E.currency}</div></div></div>
       <div class="offers">${E.fences.map(f => {
         const o = G.fenceOffer(f.id, g.uid);
         if (o.no) return `<div class="off na">${ic(f.icon)}<span class="fn">${f.short || f.name}</span><em>${o.no === 'only' ? 'Sadece antika alır' : 'Bu gece almıyor'}</em></div>`;
@@ -675,7 +678,7 @@
     }
     if (m.type === 'shop') {
       const S = G.s, packs = Shop.packs;
-      inner = `<div class="big" style="background:var(--gem);color:#0d1630">${ic('diamond')}</div><h2>${E.gemName[0].toLocaleUpperCase('tr-TR') + E.gemName.slice(1)} al</h2>
+      inner = `<div class="big" style="background:var(--gem);color:#0d1630">${ic('diamond')}</div><h2>${E.gemName[0].toLocaleUpperCase((window.I18N ? I18N.locale : 'tr-TR')) + E.gemName.slice(1)} al</h2>
         <p>Elmasla soygunları hızlandırır, komisere rüşvet verir, karaborsadan özel mallar alırsın. Şu an <b style="color:var(--gem)">${S.gems}</b> elmasın var.</p>
         <div class="packs">${packs.map((p, i) => `<button class="pack ${p.best ? 'best' : ''}" data-gempack="${i}">
           ${p.best ? '<span class="ptag">En çok tercih edilen</span>' : ''}
@@ -695,6 +698,7 @@
         ${window.Notify && Notify.supported ? (Notify.status === 'denied'
           ? `<button class="b2 tgl" disabled>${ic('bell-off')}Bildirimler<span class="sw">iPhone ayarlarından kapalı</span></button>`
           : `<button class="b2 tgl ${Notify.on ? 'on' : ''}" data-act="togglenotify">${ic(Notify.on ? 'bell-ringing' : 'bell-off')}Soygun bildirimleri<span class="sw">${Notify.on ? 'Açık' : 'Kapalı'}</span></button>`) : ''}
+        <div class="langrow">${ic('language')}<span>Dil · Language</span><div class="seg sm"><button class="${!window.I18N || I18N.lang === 'tr' ? 'on' : ''}" data-act="lang" data-l="tr">Türkçe</button><button class="${window.I18N && I18N.lang === 'en' ? 'on' : ''}" data-act="lang" data-l="en">English</button></div></div>
         ${window.Ads && Ads.privacyRequired ? `<button class="b2" data-act="adprivacy">${ic('shield-check')}Reklam gizlilik seçenekleri</button>` : ''}
         <button class="b2" data-act="askreset">${ic('refresh')}Yeni oyun başlat</button><button class="b1" data-act="close">Kapat</button>
         <p class="credits">Yazı tipleri: Inter, Playfair Display (SIL Open Font License 1.1) · Simgeler: Tabler Icons (MIT) · Lisans metinleri uygulamanın içinde, vendor klasöründe.</p>`;
@@ -713,7 +717,7 @@
 
   function toast(html) {
     const el = document.createElement('div');
-    el.className = 'toast'; el.innerHTML = html;
+    el.className = 'toast'; el.innerHTML = L(html);
     $layer.appendChild(el);
     setTimeout(() => el.remove(), 2700);
   }
@@ -721,7 +725,7 @@
   const screens = { koleksiyon: scrKoleksiyon, karaborsa: scrKaraborsa, hedef: scrHedef, yetenek: scrYetenek, alet: scrAlet, gazete: scrGazete, ekip: scrEkip };
   function render() {
     const scrolls = [...$ui.querySelectorAll('.scroll')].map(el => el.scrollTop);
-    $ui.innerHTML = top() + `<div class="body">${rail()}<main class="screen">${screens[ui.screen]()}</main></div>` + modal();
+    $ui.innerHTML = L(top() + `<div class="body">${rail()}<main class="screen">${screens[ui.screen]()}</main></div>` + modal());
     $ui.querySelectorAll('.scroll').forEach((el, i) => { if (scrolls[i]) el.scrollTop = scrolls[i]; });
   }
 
@@ -833,6 +837,7 @@
         case 'buygem': if (G.buyGem() && (snd('gem'), true)) toast(`${ic('diamond', 'gem')}Bir elmas alındı`); break;
         case 'menu': ui.modal = { type: 'menu' }; break;
         case 'ach': ui.modal = { type: 'ach' }; break;
+        case 'lang': if (window.I18N && d.l !== I18N.lang) { G.touch(Date.now(), true); I18N.set(d.l); } break;
         case 'adprivacy': if (window.Ads) Ads.privacyOptions(); break;
         case 'night': ui.modal = { type: 'night' }; break;
         case 'mini': mgStart(); if (mg) ui.modal = { type: 'mini' }; break;
@@ -848,7 +853,7 @@
         }
         case 'sell': {
           const r = G.sellGood(d.f, d.g);
-          if (r) { snd('coin'); toast(`${ic('coins', 'au')}${r.good.name} satıldı: +${fmt(r.price)} ${E.currency}`);
+          if (r) { snd('coin'); toast(`${ic('coins', 'au')}${TRX(r.good.name)} satıldı: +${fmt(r.price)} ${E.currency}`);
             if (r.heatUp) setTimeout(() => { snd('whistle'); toast(`${ic('urgent', 'no')}Malın izi sürüldü: ${G.heatLabel()} +1`); }, 900); }
           break;
         }
@@ -925,6 +930,6 @@
     refresh() { render(); },
   };
 
-  document.title = E.title;
+  document.title = L(E.title);
   render();
 })();

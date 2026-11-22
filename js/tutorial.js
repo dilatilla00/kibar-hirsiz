@@ -48,13 +48,13 @@ window.Tour = (function () {
     if (i >= STEPS.length) return finish();
     step = Math.max(0, i);
     const s = STEPS[step], last = step === STEPS.length - 1;
-    $c.querySelector('.bub').innerHTML = `
+    $c.querySelector('.bub').innerHTML = (window.I18N ? I18N.L : s => s)(`
       ${s.icon ? `<div class="bic">${ic(s.icon)}</div>` : ''}
       <div class="bt">${s.title}</div><div class="bx">${s.text}</div>
       <div class="bf"><span class="bn">${step + 1} / ${STEPS.length}</span>
         ${last ? '' : '<button class="linkbtn" data-tour="skip">Turu atla</button>'}
         ${step > 0 && !last ? '<button class="b2 bb" data-tour="back">Geri</button>' : ''}
-        <button class="b1 bnext" data-tour="next">${last ? 'Başla' : step === 0 ? 'Göster' : 'İleri'}</button></div>`;
+        <button class="b1 bnext" data-tour="next">${last ? 'Başla' : step === 0 ? 'Göster' : 'İleri'}</button></div>`);
     place();
   }
 

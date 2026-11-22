@@ -39,13 +39,13 @@ window.Ads = (function () {
       const host = document.querySelector('.game') || document.body;
       const el = document.createElement('div');
       el.className = 'adtest';
-      el.innerHTML = `<div class="adbox"><div class="adtag">TEST REKLAMI</div><div class="adttl">Burada bir reklam oynayacak</div>
-        <div class="adsub">Ödül: ${NAMES[placement] || placement}</div><div class="adcount">3</div><button class="b2 adclose" disabled>Bekle…</button><button class="linkbtn adskip">Vazgeç</button></div>`;
+      el.innerHTML = (window.I18N ? I18N.L : s => s)(`<div class="adbox"><div class="adtag">TEST REKLAMI</div><div class="adttl">Burada bir reklam oynayacak</div>
+        <div class="adsub">Ödül: ${NAMES[placement] || placement}</div><div class="adcount">3</div><button class="b2 adclose" disabled>Bekle…</button><button class="linkbtn adskip">Vazgeç</button></div>`);
       host.appendChild(el);
       let n = 3;
       const tick = setInterval(() => {
         n--; el.querySelector('.adcount').textContent = n > 0 ? n : '✓';
-        if (n <= 0) { clearInterval(tick); const b = el.querySelector('.adclose'); b.disabled = false; b.textContent = 'Ödülü al'; }
+        if (n <= 0) { clearInterval(tick); const b = el.querySelector('.adclose'); b.disabled = false; b.textContent = (window.I18N ? I18N.L : s => s)('Ödülü al'); }
       }, 1000);
       const finish = ok => { clearInterval(tick); el.remove(); resolve(ok); };
       el.querySelector('.adclose').addEventListener('click', e => { e.stopPropagation(); finish(true); });

@@ -121,7 +121,8 @@
     const d = new Date(E.startDate.y, E.startDate.m, E.startDate.d + day);
     return d.getDate() + ' ' + E.months[d.getMonth()] + ' ' + d.getFullYear();
   }
-  const fill = (s, t) => s.replace(/\{name\}/g, t.name).replace(/\{at\}/g, t.at);
+  // Ad cümle ortasındaysa İngilizcede baştaki 'The' küçük harf olsun ("The owners of the bank...")
+  const fill = (s, t) => s.replace(/\{name\}/g, (m, off) => off === 0 ? t.name : t.name.replace(/^The /, 'the ')).replace(/\{at\}/g, t.at);
   function addNews(kind, t) {
     const n = pick(E.news[kind]);
     S.news.unshift({ day: S.day, kind, h: fill(n[0], t), b: fill(n[1], t) });
@@ -266,7 +267,7 @@
       S.money += ce.money;
       const who = ce.names.length === 1 ? ce.names[0] : ce.names.length === 2 ? ce.names.join(' ve ') : 'Ekibin';
       out.rows.push({ kind: 'crew', icon: 'users', tone: 'au', money: ce.money,
-        text: `${who} sen yokken ufak işler çevirdi: <b>+${ce.money.toLocaleString('tr-TR')} ${E.currency}</b>.${ce.capped ? ` <span class="awn">(en çok ${AW.crewMaxHours} saatlik)</span>` : ''}` });
+        text: `${who} sen yokken ufak işler çevirdi: <b>+${ce.money.toLocaleString((window.I18N ? I18N.locale : 'tr-TR'))} ${E.currency}</b>.${ce.capped ? ` <span class="awn">(en çok ${AW.crewMaxHours} saatlik)</span>` : ''}` });
     }
     if (!out.rows.length) { save(); return null; }
     const d = dailyState(new Date(now));

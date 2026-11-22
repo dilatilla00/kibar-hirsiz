@@ -80,7 +80,8 @@
     const key = p ? Math.round(p.at / 1000) + '|' + p.title + '|' + p.body : '';
     if (key === lastBy[id]) return;
     lastBy[id] = key;
-    nb.postMessage(p ? { op: 'set', id, at: p.at, title: p.title, body: p.body } : { op: 'clear', id });
+    const L = window.I18N ? I18N.L : t => t;
+    nb.postMessage(p ? { op: 'set', id, at: p.at, title: L(p.title), body: L(p.body) } : { op: 'clear', id });
   }
   function sync() {
     if (!nb) return;
