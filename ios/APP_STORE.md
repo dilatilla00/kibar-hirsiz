@@ -228,12 +228,13 @@ Kod hazır: oyun İngilizce de oynanabiliyor (telefon dili Türkçe değilse İn
 5. **Gizlilik ve mesajlar** bölümünde **AB onay mesajı (GDPR)** oluştur ve yayınla. İstersen **IDFA açıklama mesajı** da ekleyebilirsin (izin penceresinden önce kısa bir açıklama gösterir).
 
 ### 2. Benim yapacaklarım (kimlikler gelince)
-- Info.plist: `GADApplicationIdentifier` ve `KHRewardedAdUnitID` gerçek kimliklerle.
+- ✅ Info.plist: `GADApplicationIdentifier` (`ca-app-pub-5651968244627563~8917118718`) ve `KHRewardedAdUnitID` (`ca-app-pub-5651968244627563/2230175459`). Debug derlemesi her zaman Google test reklamı kullanır.
 - `privacy-1.1.html` içeriğini `privacy.html`'e taşımak (reklam verileri, izinler, KVKK).
-- `app-ads.txt` dosyasını AdMob'un verdiği satırla web sitesinin köküne koymak.
+- ✅ `app-ads.txt` yayında: https://dilatilla00.github.io/app-ads.txt (depo: dilatilla00/dilatilla00.github.io; kök adres oyunun destek sayfasına yönlendirir).
 - Sürüm 1.1 (derleme 4+) arşivleyip yüklemek.
 
 ### 3. App Store Connect'te 1.1 için (sen)
+- **Marketing URL** (her iki dilde): `https://dilatilla00.github.io` — AdMob, app-ads.txt'yi bu alan adında arar. Uygulama yayınlandıktan sonra AdMob'da uygulamayı App Store'a bağla.
 - **Uygulama Gizliliği**: "Veri toplamıyoruz" yerine AdMob için şunları işaretle (Google'ın önerisi):
   - **Konum → Yaklaşık konum**: Üçüncü taraf reklam, Analiz · Kimliğe bağlı değil · İzleme için kullanılıyor: Evet
   - **Tanımlayıcılar → Cihaz kimliği**: Üçüncü taraf reklam, Analiz · Kimliğe bağlı değil · İzleme: Evet
