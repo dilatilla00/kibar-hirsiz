@@ -13,8 +13,8 @@
   const range = (a, b) => b >= 1000 ? (EN ? `${k(a).replace(',', '.')}–${k(b).replace(',', '.')}K` : `${k(a)}–${k(b)} bin`) : `${a}–${b}`;
   const ic = (name, color) => `<i class="ti ti-${name}"${color ? ` style="color:var(--${color})"` : ''} aria-hidden="true"></i>`;
   // Ödüllü reklam düğmesi: reklamlar kapalıysa ya da ödül şu an alınamıyorsa hiç görünmez.
-  const adBtn = (key, label, res) => (window.Ads && Ads.enabled() && G.canAd(key, res))
-    ? `<button class="b2 adbtn" data-ad="${key}">${ic('player-play')}<span>${label}</span><span class="adtag">Reklam</span></button>` : '';
+  const adBtn = (key, label, res, extra = '') => (window.Ads && Ads.enabled() && G.canAd(key, res))
+    ? `<button class="b2 adbtn" data-ad="${key}">${ic('player-play')}<span>${label}</span>${extra}<span class="adtag">Reklam</span></button>` : '';
   // Ses kısayolları
   const snd = (n, d) => { if (window.Sound) Sound.play(n, d); };
   function resultSound(r) {
@@ -157,7 +157,7 @@
       + (last ? `<div class="lastev">${ic(last.roll ? (last.ok ? 'circle-check' : 'alert-triangle') : 'point', last.roll ? (last.ok ? 'ok' : 'no') : 'mu')}<span><b>${last.title}:</b> ${last.text}</span></div>` : '');
     if (st.pending) return [`<div class="heist">${rows}${info}</div>`, `<button class="b1" data-act="openevent">${ic('alert-triangle')} Karar bekliyor</button>`];
     return [tip('heist', 'Soygun sürerken başka ekranlara bakabilir, hatta oyundan çıkabilirsin; iş devam eder. Acelen varsa elmasla hızlandırabilirsin.') + `<div class="heist">${rows}<p class="ptext">${cur.text}</p>${info}</div>`,
-      adBtn('rush', 'İzle, hemen ilerle') + `<button class="b2 ${G.s.gems < c ? 'off' : ''}" ${G.s.gems >= c ? 'data-act="rush"' : ''} style="margin:0">${ic('bolt', 'gem')}Hızlandır · <span data-hrush>${c}</span> ${E.gemName} <span class="mini" style="margin-left:6px">kalan <span data-htotal>${mmss(st.totalLeft)}</span></span></button>`];
+      adBtn('rush', 'İzle, hemen ilerle', null, `<span class="mini" style="margin-left:6px">${G.rushAdsLeft()}/${G.RUSH_AD_MAX}</span>`) + `<button class="b2 ${G.s.gems < c ? 'off' : ''}" ${G.s.gems >= c ? 'data-act="rush"' : ''} style="margin:0">${ic('bolt', 'gem')}Hızlandır · <span data-hrush>${c}</span> ${E.gemName} <span class="mini" style="margin-left:6px">kalan <span data-htotal>${mmss(st.totalLeft)}</span></span></button>`];
   }
 
   // Üst çubuk ve menü

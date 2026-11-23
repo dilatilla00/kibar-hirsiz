@@ -157,16 +157,18 @@
     nextQuest(); S.quest.skipDay = S.day; save(); return true;
   }
   // Ödüllü reklamlar: her ödülün sınırı var ki reklam dengeyi bozmasın.
-  //   rush   : sürmekte olan işi bir sonraki olaya / sona atla (iş başına 1)
+  //   rush   : sürmekte olan işi bir sonraki olaya / sona atla (takvim gününde toplam RUSH_AD_MAX kez)
   //   double : son başarılı işin ganimetini bir kez daha ver (sonuç başına 1)
   //   heat   : takibi 1 düşür (gecede 1)
   //   gem    : 1 elmas (gecede 1)
   //   skip   : görev değiştirme hakkı bittiyse bir kez daha (gecede 1)
+  const RUSH_AD_MAX = 5;
+  const rushAdsLeft = () => { const r = S.adRush || {}; return r.d === dayKey() ? Math.max(0, RUSH_AD_MAX - (r.n || 0)) : RUSH_AD_MAX; };
   const adUsed = k => (S.ads || {})[k] === S.day;
   const markAd = k => { S.ads = S.ads || {}; S.ads[k] = S.day; };
   function canAd(k, res) {
     switch (k) {
-      case 'rush': return !!S.heist && !S.heist.adRushed && !!rushTarget();
+      case 'rush': return !!S.heist && rushAdsLeft() > 0 && !!rushTarget();
       case 'double': return !!(res && res.ok && !res.doubled && res.loot > 0);
       case 'heat': return S.heat > 0 && !adUsed('heat');
       case 'gem': return !adUsed('gem');
@@ -177,7 +179,7 @@
   function adReward(k, res) {
     if (!canAd(k, res)) return null;
     let out = null;
-    if (k === 'rush') { const r = rushTarget(); S.heist.start = Date.now() - r.to * 1000 - (r.event ? 0 : 1000); S.heist.adRushed = true; out = true; }
+    if (k === 'rush') { const r = rushTarget(); S.heist.start = Date.now() - r.to * 1000 - (r.event ? 0 : 1000); const today = dayKey(), n = (S.adRush && S.adRush.d === today) ? S.adRush.n : 0; S.adRush = { d: today, n: n + 1 }; out = true; }
     if (k === 'double') { S.money += res.loot; S.stats.loot += res.loot; res.doubled = true; out = res.loot; }
     if (k === 'heat') { S.heat--; markAd('heat'); out = true; }
     if (k === 'gem') { S.gems++; markAd('gem'); out = 1; }
@@ -811,7 +813,7 @@
     routes: ROUTES, routeById, routeOpen, routePreview, cosList, cosOwned, cosEquipped, cosLook, equipCos, buyCos,
     tonight, nightP, chooseMini, miniSetup, fenceById, fenceOffer, haggle, haggleChance, sellGood,
     achById, achState, checkAch, touch, awayCheck, crewEarnings, dailyState, claimDaily, quest, questDone, claimQuest, skillState, canSkipQuest, skipQuest, canAd, adReward, addGems,
-    pickPattern, rob, startHeist, heistStatus, finishHeist, rushCost, rush, heistTimes, baseTimes, choose, choiceChance, choicePenalty, choiceOpen, reqText, rushTarget,
+    pickPattern, rob, startHeist, heistStatus, finishHeist, rushCost, rush, rushAdsLeft, RUSH_AD_MAX, heistTimes, baseTimes, choose, choiceChance, choicePenalty, choiceOpen, reqText, rushTarget,
     scout, rest, bribe, learn, buy, reset, markSeen,
   };
 })();
