@@ -162,55 +162,17 @@ Oyunda 5 ödüllü reklam noktası hazır; ilk sürümde hiçbiri görünmez.
 - Gerçek satış için: App Store Connect'te **Paid Apps** sözleşmesi, vergi ve banka bilgileri; yukarıdaki 4 ürünü **Consumable (tüketilebilir)** olarak açmak; iOS tarafına StoreKit eklenip `store` mesajını dinlemek ve satın alma bitince `window.Shop._done(id, true)` çağırmak.
 - Elmas satın alma oyunda sadece hızı ve kolaylığı artırır; her şey satın almadan da kazanılabilir.
 
-## Game Center (kodu hazır, ücretli hesap gerekir)
+## Game Center (1.1'de açık)
 
-Oyunda 27 başarım var. Oyuncu Game Center'a girmişse başarımlar ve iki sıralama oraya da gönderilir. Game Center'a girmemiş oyuncular için oyun her şeyi kendi içinde göstermeye devam eder.
+Oyunda 27 başarım ve 2 sıralama var. Oyuncu Game Center'a girmişse başarımlar ve sıralamalar oraya da gönderilir; girmemiş oyuncular için oyun her şeyi kendi içinde göstermeye devam eder.
 
-Ücretsiz Apple hesabıyla Game Center kullanılamıyor. Bu yüzden yetenek (capability) şimdilik projeye eklenmedi; eklenirse ücretsiz hesapla telefona kurulum bozulur. Geliştirici hesabın onaylanınca:
+Uygulama tarafı hazır: `KibarHirsiz.entitlements` dosyasında Game Center (ve iCloud) yetkisi var, `js/native.js` içinde `GC_ENABLED = true`.
 
-1. Xcode'da **KibarHirsiz → Signing & Capabilities → + Capability → Game Center** ekle.
-   Ayrıca `js/native.js` içindeki `GC_ENABLED` değerini `true` yap (1.0'da kapalı).
-2. App Store Connect'te uygulamanın **Hizmetler (Services) → Game Center** bölümüne gir.
-3. **Sıralamalar (Leaderboards)** bölümünde iki "Klasik, en yüksek puan" sıralaması oluştur:
-
-| Kimlik | Ad | Biçim |
-|---|---|---|
-| `kh_loot` | Toplam ganimet | Tam sayı, büyük olan önde |
-| `kh_level` | Seviye | Tam sayı, büyük olan önde |
-
-4. **Başarımlar (Achievements)** bölümünde aşağıdakileri **aynı kimliklerle** ekle. Toplam 895 puan (Apple'ın sınırı 1000). Her biri için 512×512 bir görsel gerekir.
-
-| Kimlik | Ad | Açıklama | Puan |
-|---|---|---|---|
-| `kh_ilk_is` | İlk iş | İlk soygununu başarıyla bitir | 10 |
-| `kh_is_25` | Mahallenin gölgesi | 25 başarılı iş yap | 25 |
-| `kh_is_100` | Şehrin kâbusu | 100 başarılı iş yap | 50 |
-| `kh_is_500` | Yaşayan efsane | 500 başarılı iş yap | 100 |
-| `kh_seri_5` | Pürüzsüz | Üst üste 5 işi başarıyla bitir | 10 |
-| `kh_seri_15` | Hayalet | Üst üste 15 işi başarıyla bitir | 50 |
-| `kh_ganimet_1k` | İlk birikim | Toplam 1.000 lira ganimet topla | 10 |
-| `kh_ganimet_100k` | Köşeyi döndün | Toplam 100.000 lira ganimet topla | 25 |
-| `kh_ganimet_10m` | Servet | Toplam 10 milyon lira ganimet topla | 100 |
-| `kh_sv_5` | Çırak | 5. seviyeye ulaş | 10 |
-| `kh_sv_15` | Kalfa | 15. seviyeye ulaş | 25 |
-| `kh_sv_30` | Usta | 30. seviyeye ulaş | 50 |
-| `kh_sehir_2` | Pasaport | İstanbul'dan başka bir şehrin yolunu aç | 25 |
-| `kh_sehir_hepsi` | Dünya turu | Bütün şehirlerin yolunu aç | 100 |
-| `kh_ekip_1` | Yalnız kurt değilsin | Ekibine ilk üyeyi al | 10 |
-| `kh_ekip_3` | Tam kadro | Ekibini 3 kişiye çıkar | 25 |
-| `kh_ekip_usta` | Usta çırak | Bir ekip üyesini en üst seviyeye kadar eğit | 25 |
-| `kh_kesif_20` | Meraklı göz | 20 keşif yap | 10 |
-| `kh_yetenek_10` | Çok yönlü | 10 yetenek öğren | 25 |
-| `kh_olay_25` | Soğukkanlı | Soygun sırasında 25 beklenmedik olayla başa çık | 25 |
-| `kh_muze_1` | Müze faresi | Bir müzeyi ya da antikacıyı soy | 25 |
-| `kh_set_1` | Koleksiyoncu | Bir koleksiyon setini tamamla | 25 |
-| `kh_efsane_1` | Efsanevi iş | İlk efsanevi işini başar | 50 |
-| `kh_gunluk_7` | Sadık müdavim | Günlük ödülü 7 gün üst üste al | 25 |
-| `kh_mini_10` | Altın parmaklar | Kilit ve kasa açmayı 10 kez kendin başar | 25 |
-| `kh_yatakci_10` | Tüccar ruhlu | Yatakçılara 10 eşya sat | 25 |
-| `kh_yakalandi` | Kodese merhaba | İlk kez yakalan. Olur böyle şeyler | 10 |
-
-5. Uygulama sürümünün sayfasında **Game Center** kutusunu işaretle ve sıralama ile başarımları sürüme ekle.
+App Store Connect'te yapılacaklar:
+1. Uygulama → **Features (Özellikler) → Game Center**.
+2. **Leaderboards** ve **Achievements** bölümlerine `ios/store/gamecenter/README.md` tablosundaki kimlik, puan, Türkçe ve İngilizce ad/açıklamalarla ekle. Görseller aynı klasörde (`kh_<kimlik>.png`, 1024×1024).
+3. 1.1 sürüm sayfasında **Game Center** kutusunu işaretle ve sıralamalarla başarımları sürüme ekle.
+4. Yaş derecelendirmesinde sıralamalar yüzünden **Contests** sorusunu **Infrequent** yap.
 
 Kimlikler `eras/1920/content.js` içindeki `achievements` listesinden gelir (`kh_` + id). Yeni başarım eklersen App Store Connect'e de aynı kimlikle eklemelisin.
 

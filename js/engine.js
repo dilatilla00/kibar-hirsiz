@@ -26,15 +26,24 @@
       won: false,
     };
   }
+  let hadSave = false; // bu cihazda daha önce kayıt var mıydı (iCloud geri yüklemesi için)
   function load() {
     try {
-      const d = JSON.parse(localStorage.getItem(KEY) || 'null');
+      const raw = localStorage.getItem(KEY);
+      hadSave = !!raw;
+      const d = JSON.parse(raw || 'null');
       if (d && d.v === 1) { S = Object.assign(fresh(), d); return; }
     } catch (e) { /* kayıt okunamazsa yeni oyun */ }
     S = fresh();
   }
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* tarayıcı izin vermezse sessizce geç */ } }
+  let frozen = false; // iCloud'dan kayıt yüklendi, sayfa yenileniyor: eski oyun artık kaydedilmesin
+  function save() { if (frozen) return; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* tarayıcı izin vermezse sessizce geç */ } }
   function reset() { S = fresh(); save(); }
+  // iCloud yedeği: kaydı dışarı ver / dışarıdan gelen kaydı yükle (sayfa yeniden açılınca geçerli olur)
+  const exportSave = () => JSON.stringify(S);
+  function importSave(str) {
+    try { const d = JSON.parse(str); if (!d || d.v !== 1) return false; localStorage.setItem(KEY, str); frozen = true; return true; } catch (e) { return false; }
+  }
   // Tek seferlik şeyleri (örn. karşılama penceresi) hatırla
   function markSeen(key) { S.seen = S.seen || {}; S.seen[key] = true; save(); }
 
@@ -813,7 +822,7 @@
     routes: ROUTES, routeById, routeOpen, routePreview, cosList, cosOwned, cosEquipped, cosLook, equipCos, buyCos,
     tonight, nightP, chooseMini, miniSetup, fenceById, fenceOffer, haggle, haggleChance, sellGood,
     achById, achState, checkAch, touch, awayCheck, crewEarnings, dailyState, claimDaily, quest, questDone, claimQuest, skillState, canSkipQuest, skipQuest, canAd, adReward, addGems,
-    pickPattern, rob, startHeist, heistStatus, finishHeist, rushCost, rush, rushAdsLeft, RUSH_AD_MAX, heistTimes, baseTimes, choose, choiceChance, choicePenalty, choiceOpen, reqText, rushTarget,
+    pickPattern, rob, startHeist, heistStatus, finishHeist, rushCost, rush, rushAdsLeft, exportSave, importSave, get hadSave() { return hadSave; }, dayKey, RUSH_AD_MAX, heistTimes, baseTimes, choose, choiceChance, choicePenalty, choiceOpen, reqText, rushTarget,
     scout, rest, bribe, learn, buy, reset, markSeen,
   };
 })();

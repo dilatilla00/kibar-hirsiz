@@ -2,6 +2,7 @@ import SwiftUI
 import WebKit
 import UserNotifications
 import GameKit
+import StoreKit
 
 /// Oyunu uygulamanın içindeki "Web" klasöründen, internet gerekmeden açar.
 struct GameView: UIViewRepresentable {
@@ -20,6 +21,8 @@ struct GameView: UIViewRepresentable {
         config.userContentController.add(context.coordinator, name: "haptic")
         config.userContentController.add(context.coordinator, name: "gc")
         config.userContentController.add(context.coordinator, name: "ads")
+        config.userContentController.add(context.coordinator, name: "review")
+        config.userContentController.add(context.coordinator, name: "cloud")
         config.userContentController.addUserScript(WKUserScript(source: """
             window.addEventListener('error', e => webkit.messageHandlers.log.postMessage('JS hata: ' + e.message + ' @ ' + e.filename + ':' + e.lineno));
             window.addEventListener('unhandledrejection', e => webkit.messageHandlers.log.postMessage('JS hata: ' + e.reason));
@@ -70,6 +73,23 @@ struct GameView: UIViewRepresentable {
                     AdsManager.shared.show { result in js("window.Ads && Ads._done(\(id), '\(result)')") }
                 }
                 return
+            case "review":
+                // Apple'ın puan penceresi (Apple yılda en çok 3 kez gösterir, ne zaman göstereceğine kendisi karar verir)
+                if let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive }) {
+                    AppStore.requestReview(in: scene)
+                }
+                return
+            case "cloud":
+                guard let m = message.body as? [String: Any] else { return }
+                switch m["op"] as? String {
+                case "save":
+                    if let data = m["data"] as? String { CloudSave.shared.save(data) }
+                case "get":
+                    CloudSave.shared.start { [weak self] raw in self?.sendCloud(raw) }
+                default: break
+                }
+                return
             case "gc":
                 if let m = message.body as? [String: Any] {
                     GameCenter.shared.handle(m) { [weak self] ok, alias in
@@ -88,6 +108,14 @@ struct GameView: UIViewRepresentable {
             default: break
             }
             NSLog("[KibarHirsiz] %@", String(describing: message.body))
+        }
+        /// iCloud'daki kaydı oyuna güvenli biçimde (JSON metni olarak) iletir.
+        func sendCloud(_ raw: String?) {
+            var arg = "null"
+            if let raw, let d = try? JSONSerialization.data(withJSONObject: [raw]), let s = String(data: d, encoding: .utf8) {
+                arg = s + "[0]"
+            }
+            web?.evaluateJavaScript("window.Cloud && Cloud._got(\(arg))")
         }
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             NSLog("[KibarHirsiz] sayfa yüklendi: %@", webView.url?.absoluteString ?? "-")
@@ -221,6 +249,36 @@ final class Notifier: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
                                 withCompletionHandler done: @escaping (UNNotificationPresentationOptions) -> Void) {
         done([])
+    }
+}
+
+/// iCloud yedeği: oyun kaydı iCloud anahtar-değer deposunda tutulur (oyuncunun kendi iCloud hesabı,
+/// sunucu yok). Uygulama silinip yeniden kurulduğunda ya da yeni telefonda ilerleme geri gelir.
+final class CloudSave {
+    static let shared = CloudSave()
+    private let store = NSUbiquitousKeyValueStore.default
+    private let key = "kh_save_1920"
+    private var onChange: ((String?) -> Void)?
+
+    /// Açılışta bir kez: iCloud'dan son kaydı al ve başka cihazdan gelen değişiklikleri dinle.
+    func start(_ send: @escaping (String?) -> Void) {
+        if onChange == nil {
+            NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+                                                   object: store, queue: .main) { [weak self] _ in
+                guard let self else { return }
+                self.onChange?(self.store.string(forKey: self.key))
+            }
+        }
+        onChange = send
+        store.synchronize()
+        send(store.string(forKey: key))
+    }
+
+    func save(_ data: String) {
+        guard data.utf8.count < 900_000 else { NSLog("[KibarHirsiz] kayıt iCloud için çok büyük"); return }
+        store.set(data, forKey: key)
+        store.set(Date().timeIntervalSince1970, forKey: key + "_t")
+        store.synchronize()
     }
 }
 

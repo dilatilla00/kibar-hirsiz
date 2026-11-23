@@ -103,9 +103,9 @@
   // iOS uygulamasında oyuncu Game Center'a giriş yaptıysa başarımlar ve sıralamalar oraya da gönderilir.
   // Kimlikler: başarım "kh_<id>", sıralamalar "kh_loot" (toplam ganimet) ve "kh_level" (seviye).
   // Bunlar App Store Connect'te aynı kimliklerle tanımlanmalı (ios/APP_STORE.md).
-  // 1.0 sürümünde kapalı: Game Center App Store Connect'te tanımlanınca (1.1) true yapılır.
-  // Kapalıyken giriş istenmez, hiçbir şey gönderilmez; başarımlar oyun içinde çalışmaya devam eder.
-  const GC_ENABLED = false;
+  // 1.0'da kapalıydı, 1.1'de açık. Kapatılırsa (false) giriş istenmez, hiçbir şey gönderilmez;
+  // başarımlar oyun içinde çalışmaya devam eder.
+  const GC_ENABLED = true;
   const gb = GC_ENABLED ? bridge('gc') : null;
   let gOk = false, alias = '', sent = {};
   const GC = {
@@ -132,4 +132,60 @@
   // Giriş, oyuncu "Oyuna başla"ya dokunduktan sonra istenir (açılış ekranını kapatmasın diye)
   if (gb) document.addEventListener('gk:start', () => gb.postMessage({ op: 'auth' }));
   if (nb) { nb.postMessage({ op: 'status' }); setInterval(sync, 1000); }
+
+  // ---------- Puan isteme ----------
+  // Oyuncu 2. seviyeye ulaşınca, ekranda açık bir pencere yokken bir kez Apple'ın puan penceresi istenir.
+  // (Apple pencereyi yılda en çok 3 kez gösterir ve ne zaman göstereceğine kendisi karar verir.)
+  const rb = bridge('review');
+  if (rb) setInterval(() => {
+    const S = G.s;
+    if (S.lv < 2 || (S.seen && S.seen.review) || document.querySelector('.modal, .coach, #splash')) return;
+    G.markSeen('review');
+    setTimeout(() => rb.postMessage('ask'), 1200);
+  }, 2000);
+
+  // ---------- iCloud yedeği ----------
+  // Kayıt telefonda durur; ayrıca iCloud'a (anahtar-değer deposu) yedeklenir.
+  //  - Uygulama yeni kurulduysa (bu cihazda hiç kayıt yoksa) ve iCloud'da kayıt varsa otomatik geri yüklenir.
+  //  - Cihazdaki oyun iCloud'dakinden gerideyse Ayarlar'da "iCloud'dan yükle" düğmesi çıkar.
+  //  - Yedek en geç 30 saniyede bir ve oyundan çıkarken alınır; iCloud'daki daha ileri bir kayıt
+  //    kendiliğinden ezilmez (iki cihazla oynayan biri ilerlemesini kaybetmesin).
+  const cb = bridge('cloud');
+  const prog = d => d && d.stats ? (d.lv || 1) * 1e12 + (d.stats.loot || 0) : -1;
+  let remote = null, remoteRaw = null, ready = false, last = '';
+  function backup(force) {
+    if (!cb || !ready) return;
+    const raw = G.exportSave();
+    if (raw === last && !force) return;
+    if (remote && prog(remote) > prog(G.s)) return; // iCloud'daki daha ileri: ezme
+    last = raw; remote = JSON.parse(raw); remoteRaw = raw;
+    cb.postMessage({ op: 'save', data: raw, t: Date.now() });
+  }
+  const Cloud = {
+    get supported() { return !!cb; },
+    get ready() { return ready; },
+    get remote() { return remote; },
+    // iCloud'daki kayıt bu cihazdakinden ileride mi?
+    get ahead() { return !!remote && prog(remote) > prog(G.s); },
+    // Yerel taraf iCloud'daki kaydı gönderir (açılışta ve başka cihaz yedek aldığında). raw: metin ya da null
+    _got(raw) {
+      let d = null;
+      try { d = raw ? JSON.parse(raw) : null; } catch (e) { d = null; }
+      if (d && d.v !== 1) d = null;
+      remote = d; remoteRaw = d ? raw : null;
+      const first = !ready; ready = true;
+      if (first && d && !G.hadSave && prog(d) > prog(G.s) && G.importSave(raw)) { location.reload(); return; }
+      if (window.UI && UI.refresh) UI.refresh();
+      if (first && Cloud.ahead && window.UI && UI.toast) UI.toast('<i class="ti ti-cloud-download" aria-hidden="true"></i>iCloud\'da daha ileri bir kayıt var. Ayarlar\'dan yükleyebilirsin.');
+      backup();
+    },
+    restore() { if (remoteRaw && G.importSave(remoteRaw)) location.reload(); },
+  };
+  window.Cloud = Cloud;
+  if (cb) {
+    cb.postMessage({ op: 'get' });
+    setInterval(backup, 30000);
+    document.addEventListener('visibilitychange', () => { if (document.hidden) backup(); });
+    window.addEventListener('pagehide', () => backup());
+  }
 })();

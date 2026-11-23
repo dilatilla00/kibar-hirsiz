@@ -699,6 +699,9 @@
           ? `<button class="b2 tgl" disabled>${ic('bell-off')}Bildirimler<span class="sw">iPhone ayarlarından kapalı</span></button>`
           : `<button class="b2 tgl ${Notify.on ? 'on' : ''}" data-act="togglenotify">${ic(Notify.on ? 'bell-ringing' : 'bell-off')}Soygun bildirimleri<span class="sw">${Notify.on ? 'Açık' : 'Kapalı'}</span></button>`) : ''}
         <div class="langrow">${ic('language')}<span>Dil · Language</span><div class="seg sm"><button class="${!window.I18N || I18N.lang === 'tr' ? 'on' : ''}" data-act="lang" data-l="tr">Türkçe</button><button class="${window.I18N && I18N.lang === 'en' ? 'on' : ''}" data-act="lang" data-l="en">English</button></div></div>
+        ${window.Cloud && Cloud.supported ? (Cloud.ahead
+          ? `<button class="b2 tgl" data-act="cloudask">${ic('cloud-download')}iCloud'dan yükle<span class="sw">Seviye ${Cloud.remote.lv}</span></button>`
+          : `<div class="mini cloudrow">${ic('cloud-check')}İlerlemen iCloud'a yedekleniyor</div>`) : ''}
         ${window.Ads && Ads.privacyRequired ? `<button class="b2" data-act="adprivacy">${ic('shield-check')}Reklam gizlilik seçenekleri</button>` : ''}
         <button class="b2" data-act="askreset">${ic('refresh')}Yeni oyun başlat</button><button class="b1" data-act="close">Kapat</button>
         <p class="credits">Yazı tipleri: Inter, Playfair Display (SIL Open Font License 1.1) · Simgeler: Tabler Icons (MIT) · Lisans metinleri uygulamanın içinde, vendor klasöründe.</p>`;
@@ -707,6 +710,12 @@
       const c = G.crewById[m.id];
       inner = `<div style="margin:0 auto 12px;width:64px">${portrait(c, 64)}</div><h2>${c.name} ekipten çıksın mı?</h2><p>Geri almak istersen işe alma ücretini yeniden ödersin ve eğitimi baştan başlar.</p>
         <div class="btn-row"><button class="b2" data-act="close">Vazgeç</button><button class="b1" data-act="dismiss">Çıkar</button></div>`;
+    }
+    if (m.type === 'cloud') {
+      const r = window.Cloud && Cloud.remote;
+      inner = `<div class="big" style="background:var(--p3);color:var(--au)">${ic('cloud-download')}</div><h2>iCloud'dan yüklensin mi?</h2>
+        <p>iCloud'da daha ileri bir kayıt var: Seviye ${r ? r.lv : '?'}, ${r && r.stats ? fmt(Math.floor(r.stats.loot)) : 0} ${E.currency} toplam ganimet. Bu cihazdaki ilerlemenin yerine geçecek.</p>
+        <div class="btn-row"><button class="b2" data-act="close">Vazgeç</button><button class="b1" data-act="cloudrestore">Yükle</button></div>`;
     }
     if (m.type === 'reset') {
       inner = `<div class="big" style="background:var(--no);color:#0d1630">${ic('alert-triangle')}</div><h2>Emin misin?</h2><p>Bütün ilerlemen silinecek ve oyun baştan başlayacak.</p>
@@ -839,6 +848,8 @@
         case 'ach': ui.modal = { type: 'ach' }; break;
         case 'lang': if (window.I18N && d.l !== I18N.lang) { G.touch(Date.now(), true); I18N.set(d.l); } break;
         case 'adprivacy': if (window.Ads) Ads.privacyOptions(); break;
+        case 'cloudask': ui.modal = { type: 'cloud' }; break;
+        case 'cloudrestore': if (window.Cloud) Cloud.restore(); break;
         case 'night': ui.modal = { type: 'night' }; break;
         case 'mini': mgStart(); if (mg) ui.modal = { type: 'mini' }; break;
         case 'mtap': mgTap(); break;
@@ -928,6 +939,7 @@
     home() { Object.assign(ui, { screen: 'hedef', tier: E.tiers[0].id, sel: null, modal: null }); render(); },
     get busy() { return !!ui.modal; },
     refresh() { render(); },
+    toast(html) { toast(html); },
   };
 
   document.title = L(E.title);

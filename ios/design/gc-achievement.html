@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Game Center başarım görseli üretici: ?i=<sıra> (0..26). 1024×1024 PNG olarak ekran görüntüsü alınır. -->
+<link rel="stylesheet" href="../../vendor/tabler/tabler-icons.min.css">
+<style>
+  html,body{margin:0;width:1024px;height:1024px;overflow:hidden;background:#0d1630}
+  .c{width:1024px;height:1024px;display:grid;place-items:center;
+     background:radial-gradient(circle at 50% 38%,#24356e 0%,#142049 55%,#0d1630 100%)}
+  .ring{width:760px;height:760px;border-radius:50%;display:grid;place-items:center;
+     background:radial-gradient(circle at 50% 35%,#ffe39a,#e9b949 60%,#b8862a);
+     box-shadow:0 0 0 18px rgba(233,185,73,.25),0 30px 80px rgba(0,0,0,.5)}
+  .in{width:640px;height:640px;border-radius:50%;display:grid;place-items:center;background:#142049;
+     box-shadow:inset 0 10px 40px rgba(0,0,0,.55)}
+  .ti{font-size:380px;color:#f4d27a;line-height:1}
+</style></head>
+<body><div class="c"><div class="ring"><div class="in"><i id="ic" class="ti"></i></div></div></div>
+<script src="../../eras/1920/content.js"></script>
+<script>
+  const i = +new URLSearchParams(location.search).get('i') || 0;
+  const a = (window.ERA || window.E || {}).achievements[i];
+  document.getElementById('ic').classList.add('ti-' + a.icon);
+</script></body></html>

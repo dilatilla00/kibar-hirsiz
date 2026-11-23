@@ -4,6 +4,7 @@
 //  frag : metnin içinde geçen parçalar
 window.UI_EN = {
   exact: {
+    'Yükle': 'Restore', "iCloud'dan yükle": 'Restore from iCloud', "iCloud'dan yüklensin mi?": 'Restore from iCloud?',
     'Yok': 'None', 'Hafif': 'Light', 'Seç': 'Select', 'Takılı': 'Equipped', 'Kapat': 'Close', 'Tamam': 'OK', 'Vazgeç': 'Cancel',
     'Açık': 'On', 'Kapalı': 'Off', 'Başla': 'Start', 'Göster': 'Show me', 'İleri': 'Next', 'Geri': 'Back', 'Turu atla': 'Skip tour',
     'Hedef': 'Targets', 'Yetenek': 'Skills', 'Alet': 'Tools', 'Karaborsa': 'Black market', 'Koleksiyon': 'Collection', 'Gazete': 'Newspaper', 'Ekip': 'Crew',
@@ -38,6 +39,7 @@ window.UI_EN = {
     'Devam': 'Continue', 'Aletler': 'Tools', 'Yetenekler': 'Skills', 'Yakalanma': 'Times caught',
   },
   rules: [
+    ["iCloud'da daha ileri bir kayıt var: Seviye (\\d+), ([\\d.,]+) (\\S+) toplam ganimet\\. Bu cihazdaki ilerlemenin yerine geçecek\\.", 'iCloud has a more advanced save: Level $1, $2 $3 total loot. It will replace the progress on this device.'],
     ["Seviye (\\d+)'de sınırsız gelişen Ustalık açılır\\.", 'At level $1, Mastery unlocks and keeps growing without limit.'],
     ['\\(en çok (\\d+) saatlik\\)', '(max $1 hours)'],
     ['\\bSv (\\d+)', 'Lv $1'],
@@ -64,6 +66,8 @@ window.UI_EN = {
     ['Şu an (\\d+)', 'You have $1'],
   ],
   frag: {
+    "İlerlemen iCloud'a yedekleniyor": 'Your progress is backed up to iCloud',
+    "iCloud'da daha ileri bir kayıt var. Ayarlar'dan yükleyebilirsin.": 'iCloud has a more advanced save. You can restore it in Settings.',
     // Üst çubuk, menü, genel
     ' tecrübe': ' XP', 'Görev ayrıntıları': 'Quest details', 'Görev ödülü': 'Quest reward',
     'Bu hedef için gerekenler': 'Requirements for this target', 'Ekip payı: ganimetin %': 'Crew cut: loot %', 'Ekip payı:': 'Crew cut:',
